@@ -59,11 +59,18 @@ function training_process()
     #fig = Figure(size = (500, 900))
     #ax = Axis(f[1, 1], xlabel = "x label", ylabel = "y label", title = "Title")
     fig, ax = lines(@lift(1:length($losses)), losses)
-    #linkyaxes!(ax)
+    autolimits!(ax)
     #linkxaxes!(ax)
     display(fig)
     #fig, ax = lines(losses) 
-
+    
+    on(losses) do losses
+        if length(losses) > 1
+            isempty(losses) && return
+            xlims!(ax, 1, length(losses))
+            ylims!(ax, minimum(losses), maximum(losses))
+        end
+    end
     #on(losses) do losses
     #    lines!(ax, (1:length(to_value(losses))), to_value(losses))
         
@@ -71,7 +78,7 @@ function training_process()
     #---
 
 
-    # Train for 5 epochs
+
     for epoch in 1:5
 
         # Iterate over batches returned by data loader
@@ -93,10 +100,11 @@ function training_process()
                 acc = accuracy(model, x_test, y_test) * 100
                 @info "Epoch $epoch, step $i:\t loss = $(loss), acc = $(acc)%"
             end
+
         end
     end
 
-    plot(losses; xlabel="Step", ylabel="Loss", yaxis=:log) # runs after training
+    #plot(losses; xlabel="Step", ylabel="Loss", yaxis=:log) # runs after training
 end
 
 export training_process
