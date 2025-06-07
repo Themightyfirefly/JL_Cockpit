@@ -2,7 +2,7 @@ using Flux
 using MLDatasets
 using Statistics
 
-using GLMakie, Makie
+using GLMakie
 
 # Example taken from https://adrianhill.de/julia-ml-course/L7_Deep_Learning/
 function preprocess(dataset)
@@ -55,16 +55,19 @@ function training_process()
     losses = Observable(Float32[])
 
     #---
-    
-    fig = Figure(size = (500, 900))
-    ax = Axis(fig[1, 1])
-    #lines!(ax, lift(1:length(to_value(losses))), lift(losses))
+    #f = Figure()
+    #fig = Figure(size = (500, 900))
+    #ax = Axis(f[1, 1], xlabel = "x label", ylabel = "y label", title = "Title")
+    fig, ax = lines(@lift(1:length($losses)), losses)
+    #linkyaxes!(ax)
+    #linkxaxes!(ax)
     display(fig)
+    #fig, ax = lines(losses) 
 
-    on(losses) do losses
-        lines!(ax, (1:length(to_value(losses))), to_value(losses))
+    #on(losses) do losses
+    #    lines!(ax, (1:length(to_value(losses))), to_value(losses))
         
-    end
+    #end
     #---
 
 
@@ -82,7 +85,7 @@ function training_process()
 
             # Keep track of losses by logging them in `losses`
             push!(losses[], loss)
-            @info "Losses: $(losses[])"
+            losses[] = losses[]
 
             # Every fifty steps, evaluate the accuracy on the test set
             # and print the accuracy and loss
