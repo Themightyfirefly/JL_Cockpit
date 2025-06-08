@@ -5,6 +5,8 @@ using Statistics
 using GLMakie
 using LinearAlgebra
 
+using jl_cockpit
+
 # Example taken from https://adrianhill.de/julia-ml-course/L7_Deep_Learning/
 function preprocess(dataset)
     x, y = dataset[:]
@@ -54,22 +56,25 @@ function training_process()
     losses = Observable(Float32[])
     gradient_norms = Observable(Float32[])
 
+    # creating a visualiser and passing the Observables
+    cockpit_vis = cockpit_visualiser(vis_loss=losses, vis_det_norm=gradient_norms)
+
     #---
     #f = Figure()
-    fig = Figure()
-    ax = Axis(fig[1, 1], xlabel = "x label", ylabel = "y label", title = "Losses")
-    ax_grad = Axis(fig[1, 2], xlabel = "x label", ylabel = "y label", title = "Gradient Norms")
+    #fig = Figure()
+    #ax = Axis(fig[1, 1], xlabel = "x label", ylabel = "y label", title = "Losses")
+    #ax_grad = Axis(fig[1, 2], xlabel = "x label", ylabel = "y label", title = "Gradient Norms")
     #fig, ax = lines(@lift(1:length($losses)), losses)
     # autolimits!(ax)
-    lines!(ax, @lift(1:length($losses)), losses)    
-    scatter!(ax_grad, @lift(1:length($gradient_norms)), gradient_norms)
+    #lines!(ax, @lift(1:length($losses)), losses)    
+    #scatter!(ax_grad, @lift(1:length($gradient_norms)), gradient_norms)
     
     
     #linkxaxes!(ax)
-    display(fig)
+    #display(fig)
     #fig, ax = lines(losses) 
     
-    on(losses) do losses
+    #=on(losses) do losses
         if length(losses) > 1
             xlims!(ax_grad, 1, length(losses))
             ylims!(ax_grad, minimum(losses), maximum(losses))
@@ -81,7 +86,7 @@ function training_process()
             xlims!(ax, 1, length(gn))
             ylims!(ax, minimum(gn), maximum(gn))
         end
-    end
+    end=#
 
 
 
@@ -97,11 +102,12 @@ function training_process()
             Flux.update!(optim, model, grads[1])
 
             # Keep track of losses by logging them in `losses`
-            push!(losses[], loss)
-            losses[] = losses[]
+            push!(losses, loss)
+            #push!(losses[], loss)
+            #losses[] = losses[]
 
-            push!(gradient_norms[], loss)
-            gradient_norms[] = gradient_norms[]
+            push!(gradient_norms, loss)
+            #gradient_norms[] = gradient_norms[]
 
             # Every fifty steps, evaluate the accuracy on the test set
             # and print the accuracy and loss
