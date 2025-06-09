@@ -28,98 +28,62 @@ function accuracy(model, x_test, y_test)
     return mean(ŷ .== y)
 end
 
-function training_process()
-    dataset_train = MNIST(; split=:train)
-    dataset_test = MNIST(; split=:test)
 
-    x_train, y_train = preprocess(dataset_train)
-    x_test, y_test = preprocess(dataset_test)
+dataset_train = MNIST(; split=:train)
+dataset_test = MNIST(; split=:test)
 
-    batchsize = 128
-    train_loader = Flux.DataLoader((x_train, y_train); batchsize=batchsize, shuffle=true);
+x_train, y_train = preprocess(dataset_train)
+x_test, y_test = preprocess(dataset_test)
 
-    model = Chain(
-        Conv((5, 5), 1 => 6, relu),  # 1 input color channel
-        MaxPool((2, 2)),
-        Conv((5, 5), 6 => 16, relu),
-        MaxPool((2, 2)),
-        Flux.flatten,
-        Dense(256, 120, relu),
-        Dense(120, 84, relu),
-        Dense(84, 10),  # 10 output classes
-    )
+batchsize = 128
+train_loader = Flux.DataLoader((x_train, y_train); batchsize=batchsize, shuffle=true);
 
-    loss_fn(ŷ, y) = Flux.logitcrossentropy(ŷ, y)
+model = Chain(
+    Conv((5, 5), 1 => 6, relu),  # 1 input color channel
+    MaxPool((2, 2)),
+    Conv((5, 5), 6 => 16, relu),
+    MaxPool((2, 2)),
+    Flux.flatten,
+    Dense(256, 120, relu),
+    Dense(120, 84, relu),
+    Dense(84, 10),  # 10 output classes
+)
 
-    optim = Flux.setup(Adam(3.0f-4), model)
+loss_fn(ŷ, y) = Flux.logitcrossentropy(ŷ, y)
 
-    losses = Observable(Float32[])
-    gradient_norms = Observable(Float32[])
+optim = Flux.setup(Adam(3.0f-4), model)
 
-    # creating a visualiser and passing the Observables
-    cockpit_vis = cockpit_visualiser(vis_loss=losses, vis_det_norm=gradient_norms)
+losses = Observable{Vector{Float32}}([])
+gradient_norms = Observable{Vector{Float32}}([])
 
-    #---
-    #f = Figure()
-    #fig = Figure()
-    #ax = Axis(fig[1, 1], xlabel = "x label", ylabel = "y label", title = "Losses")
-    #ax_grad = Axis(fig[1, 2], xlabel = "x label", ylabel = "y label", title = "Gradient Norms")
-    #fig, ax = lines(@lift(1:length($losses)), losses)
-    # autolimits!(ax)
-    #lines!(ax, @lift(1:length($losses)), losses)    
-    #scatter!(ax_grad, @lift(1:length($gradient_norms)), gradient_norms)
-    
-    
-    #linkxaxes!(ax)
-    #display(fig)
-    #fig, ax = lines(losses) 
-    
-    #=on(losses) do losses
-        if length(losses) > 1
-            xlims!(ax_grad, 1, length(losses))
-            ylims!(ax_grad, minimum(losses), maximum(losses))
+# creating a visualiser and passing the Observables
+cockpit_vis = cockpit_visualiser(vis_loss=losses, vis_grad_norm=gradient_norms)
+
+
+
+for epoch in 1:5
+
+    # Iterate over batches returned by data loader
+    for (i, (x, y)) in enumerate(train_loader)
+
+        # Compute loss and gradients of model w.r.t. its parameters
+        loss, grads = Flux.withgradient(m -> loss_fn(m(x), y), model)
+
+        # Update optimizer state
+        Flux.update!(optim, model, grads[1])
+
+        # Keep track of losses by logging them in `losses`
+        push!(losses, loss)
+        push!(gradient_norms, loss)
+
+        # Every fifty steps, evaluate the accuracy on the test set
+        # and print the accuracy and loss
+        if isone(i) || iszero(i % 50)
+            acc = accuracy(model, x_test, y_test) * 100
+            @info "Epoch $epoch, step $i:\t loss = $(loss), acc = $(acc)%"
         end
+
     end
-
-    on(gradient_norms) do gn
-        if length(gn) > 1
-            xlims!(ax, 1, length(gn))
-            ylims!(ax, minimum(gn), maximum(gn))
-        end
-    end=#
-
-
-
-    for epoch in 1:5
-
-        # Iterate over batches returned by data loader
-        for (i, (x, y)) in enumerate(train_loader)
-
-            # Compute loss and gradients of model w.r.t. its parameters
-            loss, grads = Flux.withgradient(m -> loss_fn(m(x), y), model)
-
-            # Update optimizer state
-            Flux.update!(optim, model, grads[1])
-
-            # Keep track of losses by logging them in `losses`
-            push!(losses, loss)
-            #push!(losses[], loss)
-            #losses[] = losses[]
-
-            push!(gradient_norms, loss)
-            #gradient_norms[] = gradient_norms[]
-
-            # Every fifty steps, evaluate the accuracy on the test set
-            # and print the accuracy and loss
-            if isone(i) || iszero(i % 50)
-                acc = accuracy(model, x_test, y_test) * 100
-                @info "Epoch $epoch, step $i:\t loss = $(loss), acc = $(acc)%"
-            end
-
-        end
-    end
-
-    #plot(losses; xlabel="Step", ylabel="Loss", yaxis=:log) # runs after training
 end
 
-export training_process
+#plot(losses; xlabel="Step", ylabel="Loss", yaxis=:log) # runs after training
