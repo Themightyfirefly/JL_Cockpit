@@ -66,6 +66,10 @@ for epoch in 1:5
     # Iterate over batches returned by data loader
     for (i, (x, y)) in enumerate(train_loader)
 
+
+        # https://fluxml.ai/Flux.jl/stable/reference/training/zygote/
+        #   julia> Flux.withgradient(m -> m(3), model)  # this uses Zygote
+        #   (val = 14.52, grad = ((layers = ((weight = [0.0 0.0 4.4],), (weight = [3.3;;], bias = [1.0], σ = nothing), nothing),),))
         # Compute loss and gradients of model w.r.t. its parameters
         loss, grads = Flux.withgradient(m -> loss_fn(m(x), y), model)
 
@@ -78,11 +82,14 @@ for epoch in 1:5
 
         # Every fifty steps, evaluate the accuracy on the test set
         # and print the accuracy and loss
-        if isone(i) || iszero(i % 50)
+        
+        #=if isone(i) || iszero(i % 50)
             acc = accuracy(model, x_test, y_test) * 100
             @info "Epoch $epoch, step $i:\t loss = $(loss), acc = $(acc)%"
-        end
-
+        end=#
+        
+        # Without this sleep, the visualisation will not work. TBD why...
+        sleep(0)
     end
 end
 
