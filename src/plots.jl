@@ -1,9 +1,13 @@
 using GLMakie
 
 function loss_plot!(fig, vis_loss::Observable{Vector{Float32}})
-    ax_loss = Axis(fig[1, 1], xlabel = "x label", ylabel = "y label", title = "Losses")
-    lines!(ax_loss, @lift(1:length($vis_loss)), vis_loss)
+    #ax_loss = Axis(fig[1, 1], xlabel = "x label", ylabel = "y label", title = "Losses")
+    #lines!(ax_loss, @lift(1:length($vis_loss)), vis_loss)
     
+    ax_loss = Axis(fig[1, 1], xlabel = "Iteration", ylabel = "Loss", title = "Training Loss")
+    loss_line = lines!(ax_loss, vis_loss, label = "Training Loss", color = :blue)
+    axislegend(ax_loss)
+
     on(vis_loss) do vl
         if length(vl) > 1
             xlims!(ax_loss, 1, length(vl))
