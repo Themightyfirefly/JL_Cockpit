@@ -4,6 +4,8 @@ using Statistics
 using GLMakie
 using LinearAlgebra
 
+include("visualiser.jl")
+
 function preprocess(dataset)
     x, y = dataset[:]
 
@@ -52,11 +54,8 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
     train_loader = Flux.DataLoader((x_train, y_train); batchsize=batchsize, shuffle=true);
 
 
-    # Prepare Observers for the visualiser
-    losses = Observable{Vector{Float32}}([])
-    gradient_norms = Observable{Vector{Float32}}([])
-    # creating a visualiser and passing the Observables
-    cockpit_visualiser(vis_loss=losses, vis_grad_norm=gradient_norms)
+    # creating a visualiser and pass the batch size
+    vis = visualiser(batch_size = batchsize, vis_loss = true)
 
     for epoch in 1:5
         # Iterate over batches returned by data loader
@@ -64,15 +63,13 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
             # https://fluxml.ai/Flux.jl/stable/reference/training/zygote/
             #   julia> Flux.withgradient(m -> m(3), model)  # this uses Zygote
             #   (val = 14.52, grad = ((layers = ((weight = [0.0 0.0 4.4],), (weight = [3.3;;], bias = [1.0], σ = nothing), nothing),),))
-            # Compute loss and gradients of model w.r.t. its parameters
+            # Compute loss and gradients of model w.r.t. its parameters (individually for each batch)
             loss, grads = Flux.withgradient(m -> loss_fn(m(x), y), model)
 
             # Update optimizer state
             Flux.update!(optim, model, grads[1])
-
             # Keep track of losses by logging them in `losses`
-            push!(losses, loss)
-            push!(gradient_norms, loss)
+            push!(vis.datapoints, datapoint(epoch, i, loss, grads))
             
             # Without this sleep, the visualisation will not work smoothly. TBD why...
             sleep(0)

@@ -1,3 +1,12 @@
+using GLMakie
+
+struct datapoint
+    epoch::Int
+    batch::Int
+    loss
+    grads
+end
+
 # Extending the function push! to ensure the Observable is triggered
 #
 # Observables are triggered when they get assigned a value,
@@ -7,3 +16,10 @@ function push!(list_obs::Observable{Vector{Float32}}, value::Float32)
     push!(list_obs[], value)
     list_obs[] = list_obs[]
 end
+
+function push!(obs::Observable{Vector{datapoint}}, dp::datapoint)
+    push!(obs[], dp)
+    obs[] = obs[]
+end
+
+
