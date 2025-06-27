@@ -40,6 +40,7 @@ end
 """
 function training_loop(; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128, on_batch_end = nothing)
     # Assignment of standard values
+    # TODO remove these for the final submission
     if isnothing(model)
         model = Chain(
         Conv((5, 5), 1 => 6, relu),  # 1 input color channel
@@ -65,7 +66,7 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
     x_test, y_test = preprocess(dataset_test)
     train_loader = Flux.DataLoader((x_train, y_train); batchsize=batchsize, shuffle=true);
 
-
+    #TODO Users should be able to specify the optimizer, loss, numbers of epochs etc.
     for epoch in 1:5
         # Iterate over batches returned by data loader
         for (i, (x, y)) in enumerate(train_loader)
@@ -78,9 +79,7 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
             # Update optimizer state
             Flux.update!(optim, model, grads[1])
             # Keep track of losses by logging them in `losses`
-            if on_batch_end !== nothing
-                on_batch_end(epoch, i, loss, grads)
-            end
+            push!(vis.datapoints, datapoint(epoch, i, loss, grads))
             
             # Without this sleep, the visualisation will not work smoothly. TBD why...
             sleep(0)

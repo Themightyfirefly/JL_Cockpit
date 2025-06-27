@@ -1,10 +1,10 @@
-using GLMakie
+using GLMakie: Observable
 
-struct datapoint
+struct Datapoint
     epoch::Int
     batch::Int
-    loss
-    grads
+    loss::Float32
+    grads #TODO define the type!
 end
 
 # Extending the function push! to ensure the Observable is triggered
@@ -16,7 +16,7 @@ import Base.push!
 """
 This function updates list of Observables with specific value of FLoat32
 """
-function push!(list_obs::Observable{Vector{Float32}}, value::Float32)
+function push!(list_obs::Observable{Vector{T}}, value::T) where {T<:Real}
     push!(list_obs[], value)
     list_obs[] = list_obs[]
 end
@@ -24,7 +24,7 @@ end
 """
 This function updates Observable with datapoint
 """
-function push!(obs::Observable{Vector{datapoint}}, dp::datapoint)
+function push!(obs::Observable{Vector{Datapoint}}, dp::Datapoint)
     push!(obs[], dp)
     obs[] = obs[]
 end

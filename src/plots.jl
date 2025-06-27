@@ -2,15 +2,15 @@ using GLMakie
 
 include("util.jl")
 
-struct plot_data_losses
+struct Plot_data_losses
     losses::Observable{Vector{Float32}}
 end
 
 """
     This function plots the loss of the plot data and axis
 """
-function loss_plot!(fig, datapoints::Observable{Vector{datapoint}})
-    pd_losses = plot_data_losses(Observable{Vector{Float32}}([]))
+function loss_plot!(fig, datapoints::Observable{Vector{Datapoint}})
+    pd_losses = Plot_data_losses(Observable{Vector{Float32}}([]))
 
     ax_loss = Axis(fig[1, 1], xlabel = "Iteration", ylabel = "Loss", title = "Training Loss")
     loss_line = lines!(ax_loss, pd_losses.losses, label = "Training Loss", color = :blue)
