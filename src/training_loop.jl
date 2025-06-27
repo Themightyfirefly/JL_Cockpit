@@ -6,6 +6,11 @@ using LinearAlgebra
 
 include("visualiser.jl")
 
+# Example taken from https://adrianhill.de/julia-ml-course/L7_Deep_Learning/
+"""
+    This function preprocesses features x and labels y from the given dataset for the training.
+    It transforms x into a 28x28 matrix and y into a 10-class vector.
+"""
 function preprocess(dataset)
     x, y = dataset[:]
 
@@ -18,16 +23,24 @@ function preprocess(dataset)
     return x, y
 end
 
+"""
+    This function calculates the accuracy of the model on test data
+"""
 function accuracy(model, x_test, y_test)
     # Use onecold to return class index
-    ŷ = Flux.onecold(model(x_test))
+    ŷ = Flux.onecold(model(x_test))
     y = Flux.onecold(y_test)
 
     return mean(ŷ .== y)
 end
 
+"""
+    This function trains the data in a loop
+    Call this function with optional parameters
+"""
 function training_loop(; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128)
     # Assignment of standard values
+    # TODO remove these for the final submission
     if isnothing(model)
         model = Chain(
         Conv((5, 5), 1 => 6, relu),  # 1 input color channel
@@ -53,10 +66,10 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
     x_test, y_test = preprocess(dataset_test)
     train_loader = Flux.DataLoader((x_train, y_train); batchsize=batchsize, shuffle=true);
 
-
     # creating a visualiser and pass the batch size
     vis = visualiser(batch_size = batchsize, vis_loss = true)
 
+    #TODO Users should be able to specify the optimizer, loss, numbers of epochs etc.
     for epoch in 1:5
         # Iterate over batches returned by data loader
         for (i, (x, y)) in enumerate(train_loader)

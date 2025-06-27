@@ -1,96 +1,73 @@
-using Flux
-using MLDatasets
-using Statistics
+# using Flux
+# using MLDatasets
+# using Statistics
 
-using GLMakie
-using LinearAlgebra
+# using GLMakie
+# using LinearAlgebra
 
-using jl_cockpit
+# using jl_cockpit
 
-# Example taken from https://adrianhill.de/julia-ml-course/L7_Deep_Learning/
-function preprocess(dataset)
-    x, y = dataset[:]
+# dataset_train = MNIST(; split=:train)
+# dataset_test = MNIST(; split=:test)
 
-    # Add singleton color-channel dimension to features for Conv-layers
-    x = reshape(x, 28, 28, 1, :)
+# x_train, y_train = jl_cockpit.preprocess(dataset_train)
+# x_test, y_test = jl_cockpit.preprocess(dataset_test)
 
-    # One-hot encode targets
-    y = Flux.onehotbatch(y, 0:9)
+# batchsize = 128
+# train_loader = Flux.DataLoader((x_train, y_train); batchsize=batchsize, shuffle=true);
 
-    return x, y
-end
+# model = Chain(
+#     Conv((5, 5), 1 => 6, relu),  # 1 input color channel
+#     MaxPool((2, 2)),
+#     Conv((5, 5), 6 => 16, relu),
+#     MaxPool((2, 2)),
+#     Flux.flatten,
+#     Dense(256, 120, relu),
+#     Dense(120, 84, relu),
+#     Dense(84, 10),  # 10 output classes
+# )
 
-function accuracy(model, x_test, y_test)
-    # Use onecold to return class index
-    ŷ = Flux.onecold(model(x_test))
-    y = Flux.onecold(y_test)
+# loss_fn(ŷ, y) = Flux.logitcrossentropy(ŷ, y)
 
-    return mean(ŷ .== y)
-end
+# optim = Flux.setup(Adam(3.0f-4), model)
 
+# losses = Observable{Vector{Float32}}([])
+# gradient_norms = Observable{Vector{Float32}}([])
 
-dataset_train = MNIST(; split=:train)
-dataset_test = MNIST(; split=:test)
-
-x_train, y_train = preprocess(dataset_train)
-x_test, y_test = preprocess(dataset_test)
-
-batchsize = 128
-train_loader = Flux.DataLoader((x_train, y_train); batchsize=batchsize, shuffle=true);
-
-model = Chain(
-    Conv((5, 5), 1 => 6, relu),  # 1 input color channel
-    MaxPool((2, 2)),
-    Conv((5, 5), 6 => 16, relu),
-    MaxPool((2, 2)),
-    Flux.flatten,
-    Dense(256, 120, relu),
-    Dense(120, 84, relu),
-    Dense(84, 10),  # 10 output classes
-)
-
-loss_fn(ŷ, y) = Flux.logitcrossentropy(ŷ, y)
-
-optim = Flux.setup(Adam(3.0f-4), model)
-
-losses = Observable{Vector{Float32}}([])
-gradient_norms = Observable{Vector{Float32}}([])
-
-# creating a visualiser and passing the Observables
-cockpit_vis = cockpit_visualiser(vis_loss=losses, vis_grad_norm=gradient_norms)
+# # creating a visualiser and passing the Observables
+# cockpit_vis = visualiser()
 
 
+# for epoch in 1:5
 
-for epoch in 1:5
-
-    # Iterate over batches returned by data loader
-    for (i, (x, y)) in enumerate(train_loader)
+#     # Iterate over batches returned by data loader
+#     for (i, (x, y)) in enumerate(train_loader)
 
 
-        # https://fluxml.ai/Flux.jl/stable/reference/training/zygote/
-        #   julia> Flux.withgradient(m -> m(3), model)  # this uses Zygote
-        #   (val = 14.52, grad = ((layers = ((weight = [0.0 0.0 4.4],), (weight = [3.3;;], bias = [1.0], σ = nothing), nothing),),))
-        # Compute loss and gradients of model w.r.t. its parameters
-        loss, grads = Flux.withgradient(m -> loss_fn(m(x), y), model)
+#         # https://fluxml.ai/Flux.jl/stable/reference/training/zygote/
+#         #   julia> Flux.withgradient(m -> m(3), model)  # this uses Zygote
+#         #   (val = 14.52, grad = ((layers = ((weight = [0.0 0.0 4.4],), (weight = [3.3;;], bias = [1.0], σ = nothing), nothing),),))
+#         # Compute loss and gradients of model w.r.t. its parameters
+#         loss, grads = Flux.withgradient(m -> loss_fn(m(x), y), model)
 
-        # Update optimizer state
-        Flux.update!(optim, model, grads[1])
+#         # Update optimizer state
+#         Flux.update!(optim, model, grads[1])
 
-        # Keep track of losses by logging them in `losses`
-        push!(losses, loss)
-        push!(gradient_norms, loss)
+#         # Keep track of losses by logging them in `losses`
+#         push!(losses, loss)
+#         push!(gradient_norms, loss)
 
-        # Every fifty steps, evaluate the accuracy on the test set
-        # and print the accuracy and loss
+#         # Every fifty steps, evaluate the accuracy on the test set
+#         # and print the accuracy and loss
         
-        #=if isone(i) || iszero(i % 50)
-            acc = accuracy(model, x_test, y_test) * 100
-            @info "Epoch $epoch, step $i:\t loss = $(loss), acc = $(acc)%"
-        end=#
+#         #=if isone(i) || iszero(i % 50)
+#             acc = accuracy(model, x_test, y_test) * 100
+#             @info "Epoch $epoch, step $i:\t loss = $(loss), acc = $(acc)%"
+#         end=#
         
-        # Without this sleep, the visualisation will not work. TBD why...
-        sleep(0)
-    end
-end
+#         # Without this sleep, the visualisation will not work. TBD why...
+#         sleep(0)
+#     end
+# end
 
-#plot(losses; xlabel="Step", ylabel="Loss", yaxis=:log) # runs after training
+# #plot(losses; xlabel="Step", ylabel="Loss", yaxis=:log) # runs after training
