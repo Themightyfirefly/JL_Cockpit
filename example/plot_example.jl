@@ -1,16 +1,15 @@
-using jl_cockpit
-using GLMakie
+# using jl_cockpit
+# using GLMakie
 
-losses = Observable{Vector{Float32}}([])
-gradient_norms = Observable{Vector{Float32}}([])
+# losses = Observable{Vector{Float32}}([])
+# gradient_norms = Observable{Vector{Float32}}([])
 
-cockpit_vis = cockpit_visualiser(vis_loss=losses, vis_grad_norm= gradient_norms)
+# cockpit_vis = visualiser()
 
+# for i in rand(4000)
 
-for i in rand(4000)
-
-    push!(losses, Float32(i))
+#     push!(losses, Float32(i))
     
-    @info(i)
-    sleep(0.1)
-end
+#     @info(i)
+#     sleep(0.1)
+# end
