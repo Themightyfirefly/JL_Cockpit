@@ -66,6 +66,9 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
     x_test, y_test = preprocess(dataset_test)
     train_loader = Flux.DataLoader((x_train, y_train); batchsize=batchsize, shuffle=true);
 
+    # creating a visualiser and pass the batch size
+    vis = visualiser(batch_size = batchsize, vis_loss = true)
+
     #TODO Users should be able to specify the optimizer, loss, numbers of epochs etc.
     for epoch in 1:5
         # Iterate over batches returned by data loader
