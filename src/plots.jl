@@ -6,6 +6,9 @@ struct plot_data_losses
     losses::Observable{Vector{Float32}}
 end
 
+"""
+    This function plots the loss of the plot data and axis
+"""
 function loss_plot!(fig, datapoints::Observable{Vector{datapoint}})
     pd_losses = plot_data_losses(Observable{Vector{Float32}}([]))
 
@@ -15,7 +18,7 @@ function loss_plot!(fig, datapoints::Observable{Vector{datapoint}})
     axislegend(ax_loss)
 
     on(datapoints) do data
-        @info(typeof(data[end]))
+        @info "New datapoint" data[end].batch
         push!(pd_losses.losses, data[end].loss)
     end
 

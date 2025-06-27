@@ -6,6 +6,11 @@ using LinearAlgebra
 
 include("visualiser.jl")
 
+# Example taken from https://adrianhill.de/julia-ml-course/L7_Deep_Learning/
+"""
+    This function preprocesses features x and labels y from the given dataset for the training.
+    It transforms x into a 28x28 matrix and y into a 10-class vector.
+"""
 function preprocess(dataset)
     x, y = dataset[:]
 
@@ -18,15 +23,22 @@ function preprocess(dataset)
     return x, y
 end
 
+"""
+    This function calculates the accuracy of the model on test data
+"""
 function accuracy(model, x_test, y_test)
     # Use onecold to return class index
-    ŷ = Flux.onecold(model(x_test))
+    ŷ = Flux.onecold(model(x_test))
     y = Flux.onecold(y_test)
 
     return mean(ŷ .== y)
 end
 
-function training_loop(; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128)
+"""
+    This function trains the data in a loop
+    Call this function with optional parameters
+"""
+function training_loop(; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128, on_batch_end = nothing)
     # Assignment of standard values
     if isnothing(model)
         model = Chain(
@@ -54,9 +66,6 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
     train_loader = Flux.DataLoader((x_train, y_train); batchsize=batchsize, shuffle=true);
 
 
-    # creating a visualiser and pass the batch size
-    vis = visualiser(batch_size = batchsize, vis_loss = true)
-
     for epoch in 1:5
         # Iterate over batches returned by data loader
         for (i, (x, y)) in enumerate(train_loader)
@@ -69,7 +78,9 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
             # Update optimizer state
             Flux.update!(optim, model, grads[1])
             # Keep track of losses by logging them in `losses`
-            push!(vis.datapoints, datapoint(epoch, i, loss, grads))
+            if on_batch_end !== nothing
+                on_batch_end(epoch, i, loss, grads)
+            end
             
             # Without this sleep, the visualisation will not work smoothly. TBD why...
             sleep(0)
