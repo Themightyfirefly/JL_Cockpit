@@ -38,7 +38,7 @@ end
     This function trains the data in a loop
     Call this function with optional parameters
 """
-function training_loop(; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128, on_batch_end = nothing)
+function training_loop(; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128)
     # Assignment of standard values
     # TODO remove these for the final submission
     if isnothing(model)
