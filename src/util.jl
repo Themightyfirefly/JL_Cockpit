@@ -28,3 +28,26 @@ function push!(obs::Observable{Vector{Datapoint}}, dp::Datapoint)
     push!(obs[], dp)
     obs[] = obs[]
 end
+
+
+
+# Grad flatten as provided by Adrian
+
+# Create empty array to write into
+myflatten(x) = myflatten!(Float32[], x)
+# By convention, we indicate functions what mutate inputs with an “!”.
+
+# If `t` is a (Named)Tuple, iterate over contents and write them into `res`
+function myflatten!(res, t::Union{Tuple, NamedTuple})
+    for val in t
+        myflatten!(res, val)
+    end
+    return res
+end
+
+# If we get an array, append it to res
+myflatten!(res, xs::AbstractArray) = append!(res,
+xs) 
+
+# If we get anything else (scalar values, `noting`), ignore
+myflatten!(res, x) = nothing

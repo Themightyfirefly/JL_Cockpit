@@ -1,4 +1,5 @@
 using GLMakie
+using LinearAlgebra
 
 include("util.jl")
 
@@ -32,33 +33,28 @@ function loss_plot!(fig, datapoints::Observable{Vector{Datapoint}})
     return ax_loss
 end
 
-#=struct grad_norm_plot
-    grad_norm::Observable{Vector{Float32}}
+struct Plot_grad_norm
+    grad_norms::Observable{Vector{Float32}}
 end
-function grad_norm_plot(fig, vis_grad::Observable{Vector{Float32}})
-    ax_grad = Axis(fig[1, 2], xlabel = "x label", ylabel = "y label", title = "Gradient Norms")
 
-    on(vis_grad) do gn
-        if length(gn) > 1
-            xlims!(ax_grad, 1, length(gn))
-            ylims!(ax_grad, minimum(gn), maximum(gn))
+function grad_norm_plot!(fig, datapoints::Observable{Vector{Datapoint}})
+    pd_grad_norm = Plot_grad_norm(Observable{Vector{Float32}}([]))
+
+    ax_grad_norm = Axis(fig[2, 1], xlabel = "Iteration", ylabel = "GradNorm", title = "Gradient Norms")
+    norm_line = lines!(ax_grad_norm, pd_grad_norm.grad_norms, label = "Gradient Norm", color = :blue)
+
+    axislegend(ax_grad_norm)
+
+    on(datapoints) do data
+        push!(pd_grad_norm.grad_norms, norm(myflatten(data[end].grads)))
+    end
+
+    on(pd_grad_norm.grad_norms) do norms
+        if length(norms) > 1
+            xlims!(ax_grad_norm, 1, length(norms))
+            ylims!(ax_grad_norm, minimum(norms), maximum(norms))
         end
     end
 
-
+    return ax_grad_norm
 end
-
-
-function grad_norm_plot!(fig, vis_grad_norm::Observable{Vector{Float32}})
-    ax_grad = Axis(fig[1, 2], xlabel = "x label", ylabel = "y label", title = "Gradient Norms")
-    scatter!(ax_grad, @lift(1:length($vis_grad_norm)), vis_grad_norm)
-    
-    on(vis_grad_norm) do gn
-        if length(gn) > 1
-            xlims!(ax_grad, 1, length(gn))
-            ylims!(ax_grad, minimum(gn), maximum(gn))
-        end
-    end
-
-    return ax_grad
-end=#

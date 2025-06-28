@@ -20,7 +20,7 @@ function visualiser(; batch_size = 1, vis_loss::Bool = false, vis_grad_norm::Boo
     fig = Figure()
     
     vis_loss && loss_plot!(fig, datapoints)
-    #vis_grad_norm && grad_norm_plot!(fig, datapoints)
+    vis_grad_norm && grad_norm_plot!(fig, datapoints)
     
     display(fig)
 
