@@ -67,7 +67,7 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
     train_loader = Flux.DataLoader((x_train, y_train); batchsize=batchsize, shuffle=true);
 
     # creating a visualiser and pass the batch size
-    vis = visualiser(batch_size = batchsize, vis_loss = true, vis_grad_norm = true, vis_update_size = true)
+    vis = visualiser(batch_size = batchsize, vis_loss = true, vis_grad_norm = true, vis_update_size = true, vis_distance = true)
 
     #get init params
     params_init = deepcopy(Flux.params(model))
