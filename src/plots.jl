@@ -89,3 +89,34 @@ function update_size_plot!(fig, datapoints::Observable{Vector{Datapoint}})
 
     return ax_update_size
 end
+
+
+struct Plot_distance
+    distances::Observable{Vector{Float32}}
+end
+
+function distance_plot!(fig, datapoints::Observable{Vector{Datapoint}})
+    pd_distance = Plot_distance(Observable{Vector{Float32}}([]))
+
+    ax_distance = Axis(fig[4, 1], xlabel = "Iteration", ylabel = "Distance", title = "Distances")
+    size_line = lines!(ax_distance, pd_distance.distances, label = "Distances", color = :blue)
+
+    axislegend(ax_distance)
+
+    on(datapoints) do data
+        
+        
+        push!(pd_distance.distances, norm([p1 - p2 for (p1, p2) in zip(data[end].params_after, data[end].params_init)]))
+
+        
+    end
+
+    on(pd_distance.distances) do sizes
+        if length(sizes) > 1
+            xlims!(ax_distance, 1, length(sizes))
+            ylims!(ax_distance, minimum(sizes), maximum(sizes))
+        end
+    end
+
+    return ax_distance
+end
