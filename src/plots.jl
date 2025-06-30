@@ -78,3 +78,36 @@ function hist_1d_plot!(fig, datapoints::Observable{Vector{Datapoint}})
     end
 
 end
+
+function grad_norm_hist2d_plot!(fig, param_norm_matrix::Observable{Matrix{Float32}})
+    ax = Axis(fig[2, 2], xlabel="Parameter Index", ylabel="Training Step", title="Grad Norm Histogram 2D")
+    heat_data = Observable(rand(Float32, 1, 1))
+
+    heatmap_obj = heatmap!(ax, heat_data, colormap = :turbo) 
+    Colorbar(fig[2, 3], heatmap_obj)  # show color scale
+
+    on(param_norm_matrix) do mat
+        rows, cols = size(mat)
+        if rows > 0 && cols > 0 && !isempty(mat)
+            mat_norm = mat ./ maximum(mat)
+            heat_data[] = mat_norm
+
+            sorted_vals = sort(vec(mat))
+            n = length(sorted_vals)
+            q1 = sorted_vals[clamp(floor(Int, n * 0.01), 1, n)]
+            q99 = sorted_vals[clamp(ceil(Int, n * 0.99), 1, n)]
+
+            hmin = q1
+            hmax = q99
+
+            if abs(hmax - hmin) < 1e-5
+                hmin -= 0.01
+                hmax += 0.01
+            end
+            heatmap_obj.colorrange[] = (hmin, hmax)
+        else
+        end
+    end
+
+    return ax
+end

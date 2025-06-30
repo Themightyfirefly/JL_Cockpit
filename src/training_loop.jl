@@ -83,7 +83,21 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
             Flux.update!(optim, model, grads[1])
 
             push!(vis.datapoints, Datapoint(epoch, i, loss, grads))
+
+            grad_vec = param_grad_norms(grads)
+            if isempty(grad_vec)
+                println("grad_vec is empty at epoch $epoch, batch $i")
+                continue
+            end
+            new_row = reshape(grad_vec, 1, :)
+
+            if isempty(vis.param_norm_matrix[])
+                 vis.param_norm_matrix[] = new_row
+            else
+            vis.param_norm_matrix[] = vcat(vis.param_norm_matrix[], new_row)
+            end      # Trigger update
             
+            @show size(vis.param_norm_matrix[])
             # Without this sleep, the visualisation will not work smoothly. TBD why...
             sleep(0)
         end

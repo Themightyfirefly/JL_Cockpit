@@ -55,3 +55,26 @@ xs)
 
 # If we get anything else (scalar values, `noting`), ignore
 myflatten!(res, x) = nothing
+
+mycollect(x) = mycollect!(Any[], x)
+
+function mycollect!(res, t::Union{Tuple, NamedTuple})
+    for val in t
+        mycollect!(res, val)
+    end
+    return res
+end
+
+mycollect!(res, x::AbstractArray) = push!(res, x)
+mycollect!(res, x) = nothing
+
+
+function param_grad_norms(grads)
+    norms = Float32[]
+    for g in Flux.params(grads)
+        if g !== nothing
+            push!(norms, norm(g))
+        end
+    end
+    return norms
+end
