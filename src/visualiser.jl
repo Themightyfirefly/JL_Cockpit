@@ -12,18 +12,21 @@ end
 
 Initialises the visualiser. It will take the given Observables and display a plot that updates live. 
 """
-function visualiser(; vis_loss::Bool = true, vis_grad_norm::Bool = true, vis_hist_1d = true)
+function visualiser(; vis_loss::Bool = true, vis_grad_norm::Bool = true, vis_hist_1d = true, vis_params = true, vis_distance = true, vis_update_size = true)
     GLMakie.activate!()
     GLMakie.closeall()
     
     datapoints = Observable{Vector{Datapoint}}([])
 
     with_theme(theme_black()) do
-        fig = Figure()
+        fig = Figure(size = (1920, 1080))
         
         vis_loss && loss_plot!(fig, datapoints)
         vis_grad_norm && grad_norm_plot!(fig, datapoints)
         vis_hist_1d && hist_1d_plot!(fig, datapoints)
+        vis_params && params_plot!(fig, datapoints)
+        vis_distance && distance_plot!(fig, datapoints)
+        vis_update_size && update_size_plot!(fig, datapoints)
 
         display(fig)
     end
