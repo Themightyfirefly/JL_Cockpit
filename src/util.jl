@@ -1,10 +1,12 @@
 using GLMakie: Observable
+using Zygote
 
 struct Datapoint
     epoch::Int
     batch::Int
-    loss::Float32
+    loss::Union{Float32, Nothing}
     grads #TODO define the type!
+    params::Zygote.Params{Zygote.Buffer{Any, Vector{Any}}}
 end
 
 # Extending the function push! to ensure the Observable is triggered
@@ -43,6 +45,14 @@ myflatten(x) = myflatten!(Float32[], x)
 
 # If `t` is a (Named)Tuple, iterate over contents and write them into `res`
 function myflatten!(res, t::Union{Tuple, NamedTuple})
+    for val in t
+        myflatten!(res, val)
+    end
+    return res
+end
+
+# Expanding the function for the Parameter case
+function myflatten!(res, t::Zygote.Params{Zygote.Buffer{Any, Vector{Any}}})
     for val in t
         myflatten!(res, val)
     end

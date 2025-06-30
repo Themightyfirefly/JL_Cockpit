@@ -13,6 +13,7 @@ MLDatasets = "eb30cadb-4394-5ae3-aed4-317e484a6458"
 Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+Zygote = "e88e6eb3-aa80-5325-afca-941959d7151f"
 
 [compat]
 CairoMakie = "0.13.7"
@@ -24,4 +25,5 @@ MLDatasets = "0.7.18"
 Makie = "0.22"
 Plots = "1.40.13"
 Statistics = "1.11.1"
+Zygote = "0.6.77"
 julia = "1.11"
