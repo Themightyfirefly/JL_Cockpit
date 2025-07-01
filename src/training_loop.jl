@@ -38,7 +38,7 @@ end
     This function trains the data in a loop
     Call this function with optional parameters
 """
-function training_loop(; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128)
+function training_loop(; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128, epochs = 5, optim = nothing)
     # Assignment of standard values
     # TODO remove these for the final submission
     if isnothing(model)
@@ -59,7 +59,9 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
     if isnothing(dataset_test)
         dataset_test = MNIST(; split=:test)
     end
-    optim = Flux.setup(Adam(3.0f-4), model)
+    if isnothing(optim)
+        optim = Flux.setup(Adam(3.0f-4), model)
+    end
     loss_fn(ŷ, y) = Flux.logitcrossentropy(ŷ, y)
 
     x_train, y_train = preprocess(dataset_train)
@@ -71,8 +73,8 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
 
     push!(vis.datapoints, Datapoint(-1, -1, nothing, nothing, Flux.params(model)))
 
-    #TODO Users should be able to specify the optimizer, loss, numbers of epochs etc.
-    for epoch in 1:5
+    #TODO Users should be able to specify the loss, etc.
+    for epoch in 1:epochs
         # Iterate over batches returned by data loader
         for (i, (x, y)) in enumerate(train_loader)
             # https://fluxml.ai/Flux.jl/stable/reference/training/zygote/
