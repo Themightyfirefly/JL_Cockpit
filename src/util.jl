@@ -5,7 +5,7 @@ struct Datapoint
     epoch::Int
     batch::Int
     loss::Union{Float32, Nothing}
-    grads #TODO define the type!
+    grads::Union{@NamedTuple{Any}, Nothing}
     params::Zygote.Params{Zygote.Buffer{Any, Vector{Any}}}
 end
 
