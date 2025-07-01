@@ -1,3 +1,10 @@
+using GLMakie
+using LinearAlgebra
+using Zygote
+using Flux
+using MLDatasets
+using Statistics
+
 module jl_cockpit
 
     # plots.jl is used to define how each individual plot looks like
