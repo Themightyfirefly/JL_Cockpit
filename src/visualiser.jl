@@ -3,7 +3,7 @@ using GLMakie: Observable, Figure
 include("plots.jl")
 
 #TODO struct should be capitalized
-struct visualiser
+struct Visualiser
     datapoints::Observable{Vector{Datapoint}}
 end
 
@@ -31,7 +31,7 @@ function visualiser(; vis_loss::Bool = true, vis_grad_norm::Bool = true, vis_his
         display(fig)
     end
 
-    return visualiser(datapoints)
+    return Visualiser(datapoints)
 end
 
 export visualiser
