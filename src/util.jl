@@ -19,6 +19,7 @@ import Base.push!
 This function updates list of Observables with specific value of FLoat32
 """
 function push!(list_obs::Observable{Vector{T}}, value::T) where {T<:Real}
+    value === nothing && return
     push!(list_obs[], value)
     list_obs[] = list_obs[]
 end

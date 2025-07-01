@@ -28,7 +28,12 @@ function visualiser(; vis_loss::Bool = true, vis_grad_norm::Bool = true, vis_his
         vis_distance && distance_plot!(fig, datapoints)
         vis_update_size && update_size_plot!(fig, datapoints)
 
+        add_slider!(fig, datapoints)
+        layout = GridLayout(1, 2)
+        fig[1, 1] = Axis(fig[1, 1], xlabel="Iteration", ylabel="Loss", title="Training Loss")
+        fig[1, 2] = Axis(fig[1, 2], xlabel="Iteration", ylabel="GradNorm", title="Gradient Norms")
         display(fig)
+        
     end
 
     return visualiser(datapoints)

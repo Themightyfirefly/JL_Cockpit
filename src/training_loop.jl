@@ -3,6 +3,7 @@ using MLDatasets
 using Statistics
 using GLMakie
 using LinearAlgebra
+#using GLMakie.GLMakie: axiszoom!, axispan!
 
 include("visualiser.jl")
 

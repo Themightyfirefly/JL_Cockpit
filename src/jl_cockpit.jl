@@ -1,5 +1,5 @@
 module jl_cockpit
-
+    
     # plots.jl is used to define how each individual plot looks like
     #include("plots.jl")
 
