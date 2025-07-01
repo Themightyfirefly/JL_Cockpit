@@ -1,5 +1,5 @@
 # jl_cockpit
-[jl_cockpit documentation](https://themightyfirefly.github.io/jl_cockpit/)
+[jl_cockpit documentation](https://themightyfirefly.github.io/jl_cockpit/dev)
 
 The jl_cockpit module is a Julia reimplementation of the cockpit python module.
 This module is being developed as part of the 'Julia for Machine Learning' course at Technische Universität Berlin.
