@@ -1,3 +1,12 @@
+# The following lines are copied from the Makie Docs Build script
+# https://github.com/MakieOrg/Makie.jl/blob/master/docs/makedocs.jl
+# They are necessary, so that the script can be executed via X11 on the headless server
+using Pkg
+cd(@__DIR__)
+Pkg.activate(".")
+Pkg.instantiate()
+Pkg.precompile()
+
 using jl_cockpit
 using Documenter
 
