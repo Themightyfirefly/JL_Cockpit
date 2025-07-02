@@ -1,11 +1,11 @@
 module jl_cockpit
     using GLMakie
-    using LinearAlgebra
+    using LinearAlgebra: norm
     using Zygote
     using Flux
     using MLDatasets
-    using Statistics
- 
+    using Statistics: mean
+
     include("training_loop.jl")
 
     export visualiser
@@ -19,8 +19,6 @@ module jl_cockpit
     export params_plot!
     export distance_plot!
     export update_size_plot!
-
-    # Utils
     
 
 end

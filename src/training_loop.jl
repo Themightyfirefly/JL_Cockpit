@@ -1,8 +1,8 @@
 using Flux
-using MLDatasets
-using Statistics
-using GLMakie
-using LinearAlgebra
+using MLDatasets: MNIST
+using GLMakie: Observable
+using LinearAlgebra: reshape
+using Statistics: mean
 
 include("visualiser.jl")
 
@@ -69,7 +69,6 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
     loss_fn(ŷ, y) = Flux.logitcrossentropy(ŷ, y)
 
     x_train, y_train = preprocess(dataset_train)
-    x_test, y_test = preprocess(dataset_test)
     train_loader = Flux.DataLoader((x_train, y_train); batchsize=batchsize, shuffle=true);
 
     # creating a visualiser and pass the batch size
@@ -81,9 +80,6 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
     for epoch in 1:epochs
         # Iterate over batches returned by data loader
         for (i, (x, y)) in enumerate(train_loader)
-            # https://fluxml.ai/Flux.jl/stable/reference/training/zygote/
-            #   julia> Flux.withgradient(m -> m(3), model)  # this uses Zygote
-            #   (val = 14.52, grad = ((layers = ((weight = [0.0 0.0 4.4],), (weight = [3.3;;], bias = [1.0], σ = nothing), nothing),),))
             # Compute loss and gradients of model w.r.t. its parameters (individually for each batch)
             loss, grads = Flux.withgradient(m -> loss_fn(m(x), y), model)
 
