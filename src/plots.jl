@@ -4,9 +4,11 @@ using LinearAlgebra
 include("util.jl")
 
 """
-    This function plots the loss of the plot data and axis
+    loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+
+Plot the loss of each Datapoint as a line graph.
 """
-function loss_plot!(fig, datapoints::Observable{Vector{Datapoint}})
+function loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
     losses = Observable{Vector{Float32}}([])
 
     ax_loss = Axis(fig[1, 1], xlabel = "Iteration", ylabel = "Loss", title = "Training Loss")
@@ -23,7 +25,12 @@ function loss_plot!(fig, datapoints::Observable{Vector{Datapoint}})
     return ax_loss
 end
 
-function grad_norm_plot!(fig, datapoints::Observable{Vector{Datapoint}})
+"""
+    grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+
+Plot the norm of the gradients in each Datapoint as a line graph. 
+"""
+function grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
     grad_norms = Observable{Vector{Float32}}([])
 
     ax_grad_norm = Axis(fig[2, 1], xlabel = "Iteration", ylabel = "GradNorm", title = "Gradient Norms")
@@ -40,7 +47,12 @@ function grad_norm_plot!(fig, datapoints::Observable{Vector{Datapoint}})
     return ax_grad_norm
 end
 
-function hist_1d_plot!(fig, datapoints::Observable{Vector{Datapoint}})
+"""
+    hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+
+Plot a histogram of gradients in the last Datapoint.
+"""
+function hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
     grad_elems = Observable{Vector{Float32}}([])
 
     ax_hist_1d = Axis(fig[1, 2], xlabel = "", ylabel = "", title = "Gradient Element Histogram")
@@ -58,7 +70,12 @@ function hist_1d_plot!(fig, datapoints::Observable{Vector{Datapoint}})
 
 end
 
-function params_plot!(fig, datapoints::Observable{Vector{Datapoint}})
+"""
+    params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+
+Plot a histogram of the parameters given in the last Datapoint.
+"""
+function params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
     params = Observable{Vector{Float32}}([])
     
     ax_params = Axis(fig[2, 2], xlabel = "", ylabel = "", title = "Parameter Histogram")
@@ -73,7 +90,12 @@ function params_plot!(fig, datapoints::Observable{Vector{Datapoint}})
     end
 end
 
-function distance_plot!(fig, datapoints::Observable{Vector{Datapoint}})
+"""
+    distance_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+
+Plot the l2 distance between the parameters in the first and last Datapoint as a point graph.
+"""
+function distance_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
     params_0 = Vector{Float32}([])
     l2_distance = Observable{Vector{Float32}}([])
 
@@ -91,7 +113,12 @@ function distance_plot!(fig, datapoints::Observable{Vector{Datapoint}})
 
 end
 
-function update_size_plot!(fig, datapoints::Observable{Vector{Datapoint}})
+"""
+    update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+
+Plot the l2 distance between parameters in the second to last and last Datapoint given.
+"""
+function update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
     params_prev = Vector{Float32}([])
     l2_distance = Observable{Vector{Float32}}([])
 

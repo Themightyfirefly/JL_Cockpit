@@ -23,7 +23,10 @@ makedocs(;
     ),
     pages=[
         "Home" => "index.md",
-        "Getting Started" => "getting_started.md"
+        "Getting Started" => "getting_started.md",
+        "Training and Visualisation" => "training.md",
+        "Plot Functions" => "plot_functions.md",
+        "Utils" => "utils.md"
     ],
 )
 

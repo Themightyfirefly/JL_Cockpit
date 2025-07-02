@@ -8,8 +8,9 @@ include("visualiser.jl")
 
 # Example taken from https://adrianhill.de/julia-ml-course/L7_Deep_Learning/
 """
-    This function preprocesses features x and labels y from the given dataset for the training.
-    It transforms x into a 28x28 matrix and y into a 10-class vector.
+    preprocess(dataset)
+
+Transform x into a 28x28 matrix and y into a 10-class vector.
 """
 function preprocess(dataset)
     x, y = dataset[:]
@@ -24,7 +25,9 @@ function preprocess(dataset)
 end
 
 """
-    This function calculates the accuracy of the model on test data
+    accuracy(model, x_test, y_test)
+
+Calculate the element wise similarity if two datasets.
 """
 function accuracy(model, x_test, y_test)
     # Use onecold to return class index
@@ -35,8 +38,9 @@ function accuracy(model, x_test, y_test)
 end
 
 """
-    This function trains the data in a loop
-    Call this function with optional parameters
+    training_loop(; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128, epochs = 5, optim = nothing)
+
+Train with AD and visualise live metrics.
 """
 function training_loop(; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128, epochs = 5, optim = nothing)
     # Assignment of standard values

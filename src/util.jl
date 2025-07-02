@@ -16,7 +16,9 @@ end
 import Base.push!
 
 """
-This function updates list of Observables with specific value of FLoat32
+    push!(list_obs::Observable{Vector{T}}, value::T) where {T<:Real}
+
+Push number onto a Vector packaged in the given Observable and trigger Observable.
 """
 function push!(list_obs::Observable{Vector{T}}, value::T) where {T<:Real}
     push!(list_obs[], value)
@@ -24,7 +26,7 @@ function push!(list_obs::Observable{Vector{T}}, value::T) where {T<:Real}
 end
 
 """
-This function updates Observable with datapoint
+Push Datapoint onto a Vector packaged in the given Observable and trigger Observable.
 """
 function push!(obs::Observable{Vector{Datapoint}}, dp::Datapoint)
     push!(obs[], dp)
