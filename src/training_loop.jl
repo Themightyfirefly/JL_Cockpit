@@ -1,15 +1,16 @@
 using Flux
-using MLDatasets
-using Statistics
-using GLMakie
-using LinearAlgebra
+using MLDatasets: MNIST
+using GLMakie: Observable
+using LinearAlgebra: reshape
+using Statistics: mean
 
 include("visualiser.jl")
 
 # Example taken from https://adrianhill.de/julia-ml-course/L7_Deep_Learning/
 """
-    This function preprocesses features x and labels y from the given dataset for the training.
-    It transforms x into a 28x28 matrix and y into a 10-class vector.
+    preprocess(dataset)
+
+Transform x into a 28x28 matrix and y into a 10-class vector.
 """
 function preprocess(dataset)
     x, y = dataset[:]
@@ -24,7 +25,9 @@ function preprocess(dataset)
 end
 
 """
-    This function calculates the accuracy of the model on test data
+    accuracy(model, x_test, y_test)
+
+Calculate the element wise similarity if two datasets.
 """
 function accuracy(model, x_test, y_test)
     # Use onecold to return class index
@@ -35,8 +38,9 @@ function accuracy(model, x_test, y_test)
 end
 
 """
-    This function trains the data in a loop
-    Call this function with optional parameters
+    training_loop(; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128, epochs = 5, optim = nothing)
+
+Train with AD and visualise live metrics.
 """
 function training_loop(; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128, epochs = 5, optim = nothing)
     # Assignment of standard values
@@ -65,7 +69,6 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
     loss_fn(ŷ, y) = Flux.logitcrossentropy(ŷ, y)
 
     x_train, y_train = preprocess(dataset_train)
-    x_test, y_test = preprocess(dataset_test)
     train_loader = Flux.DataLoader((x_train, y_train); batchsize=batchsize, shuffle=true);
 
     # creating a visualiser and pass the batch size
@@ -77,9 +80,6 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
     for epoch in 1:epochs
         # Iterate over batches returned by data loader
         for (i, (x, y)) in enumerate(train_loader)
-            # https://fluxml.ai/Flux.jl/stable/reference/training/zygote/
-            #   julia> Flux.withgradient(m -> m(3), model)  # this uses Zygote
-            #   (val = 14.52, grad = ((layers = ((weight = [0.0 0.0 4.4],), (weight = [3.3;;], bias = [1.0], σ = nothing), nothing),),))
             # Compute loss and gradients of model w.r.t. its parameters (individually for each batch)
             loss, grads = Flux.withgradient(m -> loss_fn(m(x), y), model)
 

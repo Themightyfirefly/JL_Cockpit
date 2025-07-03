@@ -20,7 +20,6 @@ function visualiser(; vis_loss::Bool = true, vis_grad_norm::Bool = true, vis_his
 
     with_theme(theme_black()) do
         fig = Figure(size = (1920, 1080))
-        
         vis_loss && loss_plot!(fig, datapoints)
         vis_grad_norm && grad_norm_plot!(fig, datapoints)
         vis_hist_1d && hist_1d_plot!(fig, datapoints)
