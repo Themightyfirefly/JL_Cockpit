@@ -1,16 +1,15 @@
 name: CI_new
 on:
   push:
-    branches:
-      - main
+    branches: ['*']
     tags: ['*']
   pull_request:
-    branches:
-      - main
+    branches: ['*']
     paths-ignore:
       - 'docs/**'
       - '*.md'
   workflow_dispatch:
+
 concurrency:
   # Skip intermediate builds: always.
   # Cancel intermediate builds: only if it is a pull request build.
