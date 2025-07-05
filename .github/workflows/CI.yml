@@ -45,7 +45,7 @@ jobs:
       #- uses: julia-actions/julia-runtest@v1
       - name: Run tests
         run: >
-          DISPLAY=:0 xvfb-run -s '-screen 0 1024x768x24';
+          DISPLAY=:0 xvfb-run -s '-screen 0 1024x768x24'
           julia -e '
             import Pkg; Pkg.activate("."), 
             Pkg.test(;coverage=true, 
