@@ -8,6 +8,6 @@ datapoints = Observable{Vector{Datapoint}}([])
 @testset "loss plot" begin
     datapoints[] = []
     plot_data = loss_plot!(fig, datapoints)
-    push!(datapoints, Datapoint(0, 0, 1,nothing, nothing))
+    push!(datapoints, Datapoint(0, 0, 1, nothing, nothing))
     @test plot_data[] == []
 end
