@@ -92,6 +92,8 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
             sleep(0)
         end
     end
+
+    return true
 end
 
 export training_loop
