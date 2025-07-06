@@ -44,6 +44,9 @@ jobs:
       - uses: julia-actions/julia-buildpkg@v1
       #- uses: julia-actions/julia-runtest@v1
       - name: Run tests
+        env:
+          DATADEPS_ALWAYS_ACCEPT: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: >
           DISPLAY=:0 xvfb-run -s '-screen 0 1024x768x24'
           julia -e '
