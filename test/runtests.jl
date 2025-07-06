@@ -6,4 +6,9 @@ using Test
     @testset "plots" begin
         include("plots_test.jl")
     end
+
+    @testset "training_loop" begin
+        include("training_loop_test.jl")
+    end
 end
+
