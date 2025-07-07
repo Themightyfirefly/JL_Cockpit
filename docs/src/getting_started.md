@@ -23,14 +23,40 @@ after that you can run the training_loop function
 
     training_loop()
 
-with default values
+which runs  
 
-otherwise you can add your own values
 
     training_loop(; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128, epochs = 5, optim = nothing)
-    
 
 
+with default values
+
+### Default Values 
+
+    Chain(
+        Conv((5, 5), 1 => 6, relu),  # 1 input color channel
+        MaxPool((2, 2)),
+        Conv((5, 5), 6 => 16, relu),
+        MaxPool((2, 2)),
+        Flux.flatten,
+        Dense(256, 120, relu),
+        Dense(120, 84, relu),
+        Dense(84, 10),  # 10 output classes
+    )
+
+- By default **model** is defined as the 8-layered model above
+
+- The datasets **dataset_train** and **dataset_test** are from MLDatasets.jl's MNIST dataset split into a training and a test dataset
+
+- The **batchsize** is set to 128 by default
+
+- The number of **epochs** is set to 5 by default
+
+- The optimizer **optim** is set to the Adam optimizer with a learning rate of 0.0003
+
+you can run training_loop with your own inputs as well
+
+   
 ## Selecting Plots one by one
 ToDO()
 
