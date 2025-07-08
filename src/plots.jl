@@ -1,6 +1,7 @@
 using GLMakie
 using LinearAlgebra
 
+
 include("util.jl")
 
 """
@@ -20,8 +21,7 @@ function loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}
             xlims!(ax_loss, 1, length(losses[]))
             ylims!(ax_loss, minimum(losses[]), maximum(losses[]))
         end
-    end
-
+    end 
     return losses
 end
 
@@ -139,4 +139,43 @@ function update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Data
     end
 
     return l2_distance
+end
+
+function hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}})
+    ax = Axis(fig[3, 2],
+        xlabel = "Gradient Value",
+        ylabel = "Parameter Value",
+        title = "GradNorm_2D")
+
+    # Initialize empty observables
+    grad_vals = Observable(Float32[])
+    param_vals = Observable(Float32[])
+    
+    # Store the scatter plot object so we can update it
+    scatter_plot = nothing
+
+    on(datapoints) do data
+        if !isempty(data) && data[end].grads !== nothing && data[end].params !== nothing
+            # Get current values
+            current_grads = myflatten(data[end].grads)
+            current_params = myflatten(data[end].params)
+            
+            # Update observables
+            grad_vals[] = current_grads
+            param_vals[] = current_params
+            
+            # Create or update the scatter plot
+            if scatter_plot === nothing
+                scatter_plot = scatter!(ax, grad_vals, param_vals,
+                    color = (:blue, 0.2),
+                    markersize = 5)
+            end
+            
+            # Auto-scale axes
+            !isempty(grad_vals[]) && xlims!(ax, extrema(grad_vals[]))
+            !isempty(param_vals[]) && ylims!(ax, extrema(param_vals[]))
+        end
+    end
+    
+    return ax
 end
