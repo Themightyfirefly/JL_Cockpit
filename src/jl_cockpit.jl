@@ -22,5 +22,4 @@ module jl_cockpit
     
     # utils
     export Datapoint
-    export myflatten!
 end

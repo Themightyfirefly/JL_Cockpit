@@ -68,42 +68,41 @@ end
     # myflatten!(res, t::Union{Tuple, NamedTuple}) -> nothing
     # 1) Tuple
     res1 = Float32[]
-    myflatten!(res1, (1.0, 2.0))
+    jl_cockpit.myflatten!(res1, (1.0, 2.0))
     @test res1 == Float32[]
 
     # 2) NamedTuple
     res2 = Float32[]
-    myflatten!(res2, (; a = 3.0, b = 4.5))
+    jl_cockpit.myflatten!(res2, (; a = 3.0, b = 4.5))
     @test res2 == Float32[]
 
     # 3) myflatten!(res, t::Zygote.Params{Zygote.Buffer{Any, Vector{Any}}})  -> nothing
     buf = Zygote.Buffer(Any[9.9, 10.10])
     ps  = Zygote.Params(Any[buf])
     res3 = Float32[]
-    myflatten!(res3, ps)
-    myflatten!(res3, ps)
+    jl_cockpit.myflatten!(res3, ps)
     @test res3 == Float32[]
 
-    # 4) myflatten!(res, xs::AbstractArray) -> append
+    # 4) myflatten!(res, xs::AbstractArray) empty array -> append
     arr  = [7.7, 8.8]
     res4 = Float32[]
-    myflatten!(res4, arr)
+    jl_cockpit.myflatten!(res4, arr)
     @test res4 == append!(res4, arr)
 
-    # 4) myflatten!(res, xs::AbstractArray) -> append
+    # 5) myflatten!(res, xs::AbstractArray) -> append
     arr  = [7.7, 8.8]
-    res8 = Float32[1.1, 6.6]
-    myflatten!(res8, arr)
-    @test res8 == append!(res8, arr)
+    res5 = Float32[1.1, 6.6]
+    jl_cockpit.myflatten!(res5, arr)
+    @test res5 == append!(res5, arr)
 
     # myflatten!(res, x) -> nothing
-    # 5) Scalar value
-    res5 = Float32[]
-    myflatten!(res5, 42.0)
-    @test res5 == Float32[]
+    # 6) Scalar value
+    res6 = Float32[]
+    jl_cockpit.myflatten!(res6, 42.0)
+    @test res6 == Float32[]
 
-    # 6) 'nothing'
-    res6 = Float32[1.1]
-    myflatten!(res6, nothing)
-    @test res6 == Float32[1.1]
+    # 7) 'nothing'
+    res7 = Float32[1.1]
+    jl_cockpit.myflatten!(res7, nothing)
+    @test res7 == Float32[1.1]
 end
