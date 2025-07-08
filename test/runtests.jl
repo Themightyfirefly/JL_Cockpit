@@ -13,5 +13,9 @@ using Test
     @testset "util" begin
         include("util_test.jl")
     end
+
+    @testset "visualiser" begin
+        include("visualiser_test.jl")
+    end
 end
 

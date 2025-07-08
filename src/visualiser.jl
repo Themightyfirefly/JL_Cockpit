@@ -15,7 +15,6 @@ function iterate_plot_pos(a::Int64, b::Int64)
     a < b && return (a+1, b)
 end
 
-#TODO struct should be capitalized
 struct Visualiser
     datapoints::Observable{Vector{Datapoint}}
 end
