@@ -228,3 +228,4 @@ end
 Use a predefined position in Figure, if none is given.
 """
 hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}) = hist_2d_plot!(fig, datapoints, a, b)
+
