@@ -38,11 +38,19 @@ function accuracy(model, x_test, y_test)
 end
 
 """
-    training_loop(; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128, epochs = 5, optim = nothing)
+    training_loop(;
+        model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128, epochs = 5, optim = nothing,
+        vis_loss::Bool = true, vis_grad_norm::Bool = true, vis_hist_1d::Bool = true, vis_params::Bool = true,
+        vis_distance::Bool = true, vis_update_size::Bool = true, vis_hist_2d::Bool = true
+    )
 
 Train with AD and visualise live metrics.
 """
-function training_loop(; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128, epochs = 5, optim = nothing)
+function training_loop(
+    ; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128, epochs = 5, optim = nothing,
+    vis_loss::Bool = true, vis_grad_norm::Bool = true, vis_hist_1d::Bool = true, vis_params::Bool = true,
+    vis_distance::Bool = true, vis_update_size::Bool = true, vis_hist_2d::Bool = true
+)
     # Assignment of standard values
     # TODO remove these for the final submission
     if isnothing(model)
@@ -72,7 +80,10 @@ function training_loop(; model = nothing, dataset_train = nothing, dataset_test 
     train_loader = Flux.DataLoader((x_train, y_train); batchsize=batchsize, shuffle=true);
 
     # creating a visualiser and pass the batch size
-    vis = visualiser()
+    vis = visualiser(
+        vis_loss = vis_loss, vis_grad_norm = vis_grad_norm, vis_hist_1d = vis_hist_1d, vis_params = vis_params, 
+        vis_distance = vis_distance, vis_update_size = vis_update_size, vis_hist_2d = vis_hist_2d
+    )
 
     push!(vis.datapoints, Datapoint(-1, -1, nothing, nothing, Flux.params(model)))
 

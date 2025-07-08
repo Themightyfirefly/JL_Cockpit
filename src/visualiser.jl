@@ -3,17 +3,16 @@ using Makie: Keyboard
 
 include("plots.jl")
 
-function increase_Figure_count!(a::Int8, b::Int8)
-    if a == b
-        a = 1
-        b += 1
-    elseif a+1 == b
-        a += 1
-        b = 1
-    elseif a > b
-        b += 1
-    elseif a < b
-        a += 1
+"""
+    iterate_plot_pos(a::Int64, b::Int64)
+
+Iterate the positions in a Figure, so that there are no gaps and the number of rows is never more than the number of columns.
+"""
+function iterate_plot_pos(a::Int64, b::Int64)
+    a == b && return (1, b+1)
+    a+1 == b && return (a+1, 1)
+    a > b && return (a, b+1)
+    a < b && return (a+1, b)
 end
 
 #TODO struct should be capitalized
@@ -22,11 +21,17 @@ struct Visualiser
 end
 
 """
-    visualiser(; vis_loss::Observable{Vector{Float32}} = nothing, vis_grad_norm::Observable{Vector{Float32}} = nothing)
+    visualiser(;
+        vis_loss::Bool = true, vis_grad_norm::Bool = true, vis_hist_1d::Bool = true, vis_params::Bool = true, 
+        vis_distance::Bool = true, vis_update_size::Bool = true, vis_hist_2d::Bool = true
+    )
 
 Initialises the visualiser. It will take the given Observables and display a plot that updates live. 
 """
-function visualiser(; vis_loss::Bool = true, vis_grad_norm::Bool = true, vis_hist_1d = true, vis_params = true, vis_distance = true, vis_update_size = true, vis_hist_2d = true)
+function visualiser(; 
+    vis_loss::Bool = true, vis_grad_norm::Bool = true, vis_hist_1d::Bool = true, vis_params::Bool = true, 
+    vis_distance::Bool = true, vis_update_size::Bool = true, vis_hist_2d::Bool = true
+)
     GLMakie.activate!()
     GLMakie.closeall()
     
@@ -34,14 +39,37 @@ function visualiser(; vis_loss::Bool = true, vis_grad_norm::Bool = true, vis_his
 
     with_theme(theme_black()) do
         fig = Figure(size = (1920, 1080))
+        a::Int64 = 1
+        b::Int64 = 1
 
-        vis_loss && loss_plot!(fig, datapoints)
-        vis_grad_norm && grad_norm_plot!(fig, datapoints)
-        vis_hist_1d && hist_1d_plot!(fig, datapoints)
-        vis_params && params_plot!(fig, datapoints)
-        vis_distance && distance_plot!(fig, datapoints)
-        vis_update_size && update_size_plot!(fig, datapoints)
-        vis_hist_2d && hist_2d_plot!(fig, datapoints)
+        if vis_loss
+            loss_plot!(fig, datapoints, a, b)
+            a,b = iterate_plot_pos(a,b)
+        end
+        if vis_grad_norm
+            grad_norm_plot!(fig, datapoints, a, b)
+            a,b = iterate_plot_pos(a,b)
+        end
+        if vis_hist_1d 
+            hist_1d_plot!(fig, datapoints, a, b)
+            a,b = iterate_plot_pos(a,b)
+        end
+        if vis_params 
+            params_plot!(fig, datapoints, a, b)
+            a,b = iterate_plot_pos(a,b)
+        end
+        if vis_distance 
+            distance_plot!(fig, datapoints, a, b)
+            a,b = iterate_plot_pos(a,b)
+        end
+        if vis_update_size
+            update_size_plot!(fig, datapoints, a, b)
+            a,b = iterate_plot_pos(a,b)
+        end
+        if vis_hist_2d
+            hist_2d_plot!(fig, datapoints, a, b)
+            a,b = iterate_plot_pos(a,b)
+        end
 
         di = DataInspector(fig, textcolor = :black, strokecolor = :black, font = "Consolas")
       
