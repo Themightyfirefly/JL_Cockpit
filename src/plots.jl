@@ -9,10 +9,10 @@ include("util.jl")
 
 Plot the loss of each Datapoint as a line graph.
 """
-function loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+function loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
     losses = Observable{Vector{Float32}}([])
 
-    ax_loss = Axis(fig[1, 1], xlabel = "Iteration", ylabel = "Loss", title = "Training Loss")
+    ax_loss = Axis(fig[a, b], xlabel = "Iteration", ylabel = "Loss", title = "Training Loss")
     lines!(ax_loss, losses, label = "Training Loss", color = :blue)
 
     on(datapoints) do data
@@ -26,14 +26,21 @@ function loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}
 end
 
 """
+    loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+
+Use a predefined position in Figure, if none is given.
+"""
+loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = loss_plot!(fig, datapoints, 1, 1)
+
+"""
     grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
 
 Plot the norm of the gradients in each Datapoint as a line graph. 
 """
-function grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+function grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
     grad_norms = Observable{Vector{Float32}}([])
 
-    ax_grad_norm = Axis(fig[2, 1], xlabel = "Iteration", ylabel = "GradNorm", title = "Gradient Norms")
+    ax_grad_norm = Axis(fig[a, b], xlabel = "Iteration", ylabel = "GradNorm", title = "Gradient Norms")
     lines!(ax_grad_norm, grad_norms, label = "Gradient Norm", color = :blue)
 
     on(datapoints) do data
@@ -48,14 +55,21 @@ function grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapo
 end
 
 """
+    grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+
+Use a predefined position in Figure, if none is given.
+"""
+grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = grad_norm_plot!(fig, datapoints, 2, 1)
+
+"""
     hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
 
 Plot a histogram of gradients in the last Datapoint.
 """
-function hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+function hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
     grad_elems = Observable{Vector{Float32}}([])
 
-    ax_hist_1d = Axis(fig[1, 2], xlabel = "", ylabel = "", title = "Gradient Element Histogram")
+    ax_hist_1d = Axis(fig[a, b], xlabel = "", ylabel = "", title = "Gradient Element Histogram")
     plot_exist = false
 
     on(datapoints) do data
@@ -72,14 +86,21 @@ function hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoin
 end
 
 """
+    hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+
+Use a predefined position in Figure, if none is given.
+"""
+hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = hist_1d_plot!(fig, datapoints, 1, 2)
+
+"""
     params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
 
 Plot a histogram of the parameters given in the last Datapoint.
 """
-function params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+function params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
     params = Observable{Vector{Float32}}([])
     
-    ax_params = Axis(fig[2, 2], xlabel = "", ylabel = "", title = "Parameter Histogram")
+    ax_params = Axis(fig[a, b], xlabel = "", ylabel = "", title = "Parameter Histogram")
     plot_exist = false
 
     on(datapoints) do data
@@ -94,15 +115,22 @@ function params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint
 end
 
 """
+    params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+
+Use a predefined position in Figure, if none is given.
+"""
+params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = params_plot!(fig, datapoints, 2, 2)
+
+"""
     distance_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
 
 Plot the l2 distance between the parameters in the first and last Datapoint as a point graph.
 """
-function distance_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+function distance_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
     params_0 = Vector{Float32}([])
     l2_distance = Observable{Vector{Float32}}([])
 
-    ax_distance = Axis(fig[1, 3], xlabel = "", ylabel = "", title = "Distance")
+    ax_distance = Axis(fig[a, b], xlabel = "", ylabel = "", title = "Distance")
     scatter!(ax_distance, l2_distance, label = "", color = Makie.wong_colors()[5])
 
     on(datapoints) do data
@@ -118,15 +146,22 @@ function distance_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoi
 end
 
 """
+    distance_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+
+Use a predefined position in Figure, if none is given.
+"""
+distance_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = distance_plot!(fig, datapoints, 1, 3)
+
+"""
     update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
 
 Plot the l2 distance between parameters in the second to last and last Datapoint given.
 """
-function update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+function update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
     params_prev = Vector{Float32}([])
     l2_distance = Observable{Vector{Float32}}([])
 
-    ax_distance = Axis(fig[2, 3], xlabel = "", ylabel = "", title = "Update Size")
+    ax_distance = Axis(fig[a, b], xlabel = "", ylabel = "", title = "Update Size")
     scatter!(ax_distance, l2_distance, label = "", color = Makie.wong_colors()[6])
 
     on(datapoints) do data
@@ -141,8 +176,15 @@ function update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Data
     return l2_distance
 end
 
-function hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}})
-    ax = Axis(fig[3, 2],
+"""
+    update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+
+Use a predefined position in Figure, if none is given.
+"""
+update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = update_size_plot!(fig, datapoints, a, b)
+
+function hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
+    ax = Axis(fig[a, b],
         xlabel = "Gradient Value",
         ylabel = "Parameter Value",
         title = "GradNorm_2D")
@@ -179,3 +221,11 @@ function hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}})
     
     return ax
 end
+
+"""
+    hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}})
+
+Use a predefined position in Figure, if none is given.
+"""
+hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}) = hist_2d_plot!(fig, datapoints, a, b)
+
