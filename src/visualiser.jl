@@ -3,6 +3,19 @@ using Makie: Keyboard
 
 include("plots.jl")
 
+function increase_Figure_count!(a::Int8, b::Int8)
+    if a == b
+        a = 1
+        b += 1
+    elseif a+1 == b
+        a += 1
+        b = 1
+    elseif a > b
+        b += 1
+    elseif a < b
+        a += 1
+end
+
 #TODO struct should be capitalized
 struct Visualiser
     datapoints::Observable{Vector{Datapoint}}
