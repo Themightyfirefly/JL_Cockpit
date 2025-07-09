@@ -25,22 +25,11 @@ function preprocess(dataset)
 end
 
 """
-    accuracy(model, x_test, y_test)
-
-Calculate the element wise similarity if two datasets.
-"""
-function accuracy(model, x_test, y_test)
-    # Use onecold to return class index
-    ŷ = Flux.onecold(model(x_test))
-    y = Flux.onecold(y_test)
-
-    return mean(ŷ .== y)
-end
-
-"""
     training_loop(;
-        model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128, epochs = 5, optim = nothing,
-        vis_loss::Bool = true, vis_grad_norm::Bool = true, vis_hist_1d::Bool = true, vis_params::Bool = true,
+        model = nothing, dataset_train = nothing, dataset_test = nothing, 
+        batchsize = 128, epochs = 5, optim = nothing,
+        vis_loss::Bool = true, vis_grad_norm::Bool = true, 
+        vis_hist_1d::Bool = true, vis_params::Bool = true,
         vis_distance::Bool = true, vis_update_size::Bool = true, vis_hist_2d::Bool = true
     )
 

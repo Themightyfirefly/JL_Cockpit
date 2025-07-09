@@ -9,6 +9,8 @@ struct Datapoint
     params::Union{Zygote.Params{Zygote.Buffer{Any, Vector{Any}}}, Nothing}
 end
 
+export Datapoint
+
 # Extending the function push! to ensure the Observable is triggered
 #
 # Observables are triggered when they get assigned a value,
@@ -26,6 +28,8 @@ function push!(list_obs::Observable{Vector{T}}, value::T) where {T<:Real}
 end
 
 """
+    push!(obs::Observable{Vector{Datapoint}}, dp::Datapoint)
+
 Push Datapoint onto a Vector packaged in the given Observable and trigger Observable.
 """
 function push!(obs::Observable{Vector{Datapoint}}, dp::Datapoint)
@@ -34,6 +38,12 @@ function push!(obs::Observable{Vector{Datapoint}}, dp::Datapoint)
 end
 
 import Base.append!
+
+"""
+    append!(obs::Observable{Vector{T}}, val_vector::Vector{T}) where {T<:Real}
+
+Append a Vector if Real number to an Observable and trigger the Observable.
+"""
 function append!(obs::Observable{Vector{T}}, val_vector::Vector{T}) where {T<:Real}
     append!(obs[], val_vector)
     obs[] = obs[]
