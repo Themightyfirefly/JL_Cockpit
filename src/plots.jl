@@ -1,7 +1,6 @@
 using GLMakie
 using LinearAlgebra
 
-
 include("util.jl")
 
 """
@@ -28,7 +27,7 @@ end
 """
     loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
 
-Use a predefined position in Figure, if none is given.
+Use a predefined position (1,1) in Figure, if none is given.
 """
 loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = loss_plot!(fig, datapoints, 1, 1)
 
@@ -57,7 +56,7 @@ end
 """
     grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
 
-Use a predefined position in Figure, if none is given.
+Use a predefined position (2,1) in Figure, if none is given.
 """
 grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = grad_norm_plot!(fig, datapoints, 2, 1)
 
@@ -88,7 +87,7 @@ end
 """
     hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
 
-Use a predefined position in Figure, if none is given.
+Use a predefined position (1,2) in Figure, if none is given.
 """
 hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = hist_1d_plot!(fig, datapoints, 1, 2)
 
@@ -118,7 +117,7 @@ end
 """
     params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
 
-Use a predefined position in Figure, if none is given.
+Use a predefined position (2,2) in Figure, if none is given.
 """
 params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = params_plot!(fig, datapoints, 2, 2)
 
@@ -149,9 +148,10 @@ end
 """
     distance_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
 
-Use a predefined position in Figure, if none is given.
+Use the predefined position (1,3) in Figure, if none is given.
 """
 distance_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = distance_plot!(fig, datapoints, 1, 3)
+
 
 """
     update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
@@ -180,10 +180,16 @@ end
 """
     update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
 
-Use a predefined position in Figure, if none is given.
+Use the predefined position (2,3) in Figure, if none is given.
 """
-update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = update_size_plot!(fig, datapoints, a, b)
+update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = update_size_plot!(fig, datapoints, 2, 3)
 
+
+"""
+    hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
+
+Plot the Parameters and the corresponding Gradients in the current training iteration.
+"""
 function hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
     ax = Axis(fig[a, b],
         xlabel = "Gradient Value",
@@ -215,13 +221,14 @@ function hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}, a::Int64,
             end
         end
     end
+
     return ax
 end
 
 """
     hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}})
 
-Use a predefined position in Figure, if none is given.
+Use the predefined position (3,1) in Figure, if none is given.
 """
-hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}) = hist_2d_plot!(fig, datapoints, a, b)
+hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}) = hist_2d_plot!(fig, datapoints, 3, 1)
 
