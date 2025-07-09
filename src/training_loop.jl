@@ -40,6 +40,9 @@ function training_loop(
     vis_loss::Bool = true, vis_grad_norm::Bool = true, vis_hist_1d::Bool = true, vis_params::Bool = true,
     vis_distance::Bool = true, vis_update_size::Bool = true, vis_hist_2d::Bool = true
 )
+
+    @info "Initialising Training"
+
     # Assignment of standard values
     # TODO remove these for the final submission
     if isnothing(model)
@@ -68,16 +71,22 @@ function training_loop(
     x_train, y_train = preprocess(dataset_train)
     train_loader = Flux.DataLoader((x_train, y_train); batchsize=batchsize, shuffle=true);
 
+    @info "Initialising Visualiser"
+
     # creating a visualiser and pass the batch size
     vis = visualiser(
         vis_loss = vis_loss, vis_grad_norm = vis_grad_norm, vis_hist_1d = vis_hist_1d, vis_params = vis_params, 
         vis_distance = vis_distance, vis_update_size = vis_update_size, vis_hist_2d = vis_hist_2d
     )
 
+    @info "Pushing Initial State to Visualiser"
+
     push!(vis.datapoints, Datapoint(-1, -1, nothing, nothing, Flux.params(model)))
 
-    #TODO Users should be able to specify the loss, etc.
+    @info "Start Training"
+
     for epoch in 1:epochs
+        @info "Epoch $epoch out of $epochs"
         # Iterate over batches returned by data loader
         for (i, (x, y)) in enumerate(train_loader)
             # Compute loss and gradients of model w.r.t. its parameters (individually for each batch)
@@ -92,6 +101,8 @@ function training_loop(
             sleep(0)
         end
     end
+
+    @info "Training Complete"
 
     return true
 end

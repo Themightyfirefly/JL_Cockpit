@@ -5,3 +5,6 @@ CurrentModule = jl_cockpit
 Pages   = ["utils.md"]
 ```
 
+```@docs
+Datapoint
+```
