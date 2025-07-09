@@ -68,7 +68,7 @@ Plot a histogram of gradients in the last Datapoint.
 function hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
     grad_elems = Observable{Vector{Float32}}([])
 
-    ax_hist_1d = Axis(fig[a, b], xlabel = "", ylabel = "", title = "Gradient Element Histogram")
+    ax_hist_1d = Axis(fig[a, b], xlabel = "", ylabel = "", title = "Gradient Element Histogram", yscale = log10)
     plot_exist = false
 
     on(datapoints) do data
@@ -76,7 +76,7 @@ function hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoin
             grad_elems[] = myflatten(data[end].grads)
             if !plot_exist
                 plot_exist = true
-                hist!(ax_hist_1d, grad_elems, bins = 50, color = Makie.wong_colors()[4], strokewidth = 0.1, strokecolor = :white)
+                hist!(ax_hist_1d, grad_elems, bins = range(-0.2, 0.2, length = 50), color = Makie.wong_colors()[4], strokewidth = 0.1, strokecolor = :white)
             end
         end
     end
@@ -99,7 +99,7 @@ Plot a histogram of the parameters given in the last Datapoint.
 function params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
     params = Observable{Vector{Float32}}([])
     
-    ax_params = Axis(fig[a, b], xlabel = "", ylabel = "", title = "Parameter Histogram", yscale= log10)
+    ax_params = Axis(fig[a, b], xlabel = "", ylabel = "", title = "Parameter Histogram")
     plot_exist = false
 
     on(datapoints) do data
