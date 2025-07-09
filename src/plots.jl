@@ -100,15 +100,16 @@ Plot a histogram of the parameters given in the last Datapoint.
 function params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
     params = Observable{Vector{Float32}}([])
     
-    ax_params = Axis(fig[a, b], xlabel = "", ylabel = "", title = "Parameter Histogram")
+    ax_params = Axis(fig[a, b], xlabel = "", ylabel = "", title = "Parameter Histogram", yscale= log10)
     plot_exist = false
 
     on(datapoints) do data
         params[] = myflatten(data[end].params)
         if !plot_exist
             plot_exist = true
-            hist!(ax_params, params, bins = 50, color = Makie.wong_colors()[3], strokewidth = 0.1, strokecolor = :white)
+            h = hist!(ax_params, params, bins = range(-0.2, 0.2, length = 50), color = Makie.wong_colors()[3], strokewidth = 0.1, strokecolor = :white)
         end
+    
     end
 
     return params
@@ -212,13 +213,8 @@ function hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}, a::Int64,
                     color = (:blue, 0.2),
                     markersize = 5)
             end
-            
-            # Auto-scale axes
-            !isempty(grad_vals[]) && xlims!(ax, extrema(grad_vals[]))
-            !isempty(param_vals[]) && ylims!(ax, extrema(param_vals[]))
         end
     end
-    
     return ax
 end
 

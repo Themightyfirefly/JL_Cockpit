@@ -41,7 +41,7 @@ function visualiser(;
         fig = Figure(size = (1920, 1080))
         a::Int64 = 1
         b::Int64 = 1
-
+        
         if vis_loss
             loss_plot!(fig, datapoints, a, b)
             a,b = iterate_plot_pos(a,b)
@@ -70,18 +70,27 @@ function visualiser(;
             hist_2d_plot!(fig, datapoints, a, b)
             a,b = iterate_plot_pos(a,b)
         end
+        
 
         di = DataInspector(fig, textcolor = :black, strokecolor = :black, font = "Consolas")
-      
+        
+        # Enable keyboard events
         on(fig.scene.events.keyboardbutton) do event
         event.key == Keyboard.r && foreach(autolimits!, fig.content)  # Press "R" to reset zoom
         event.key == Keyboard.s && save("training_plot.png", fig)     # Press "S" to save plot
         end
 
-        display(fig)
-    end
+        # Automatically exit the training loop if user closes the Makie window
+        on(events(fig.scene).window_open) do is_open
+            if !is_open
+                println("Window closed - Training interrupted.")
+                exit()  
+            end
+        end
 
-    return Visualiser(datapoints)
+        display(fig)
+    end    
+        return Visualiser(datapoints)
 end
 
 export visualiser
