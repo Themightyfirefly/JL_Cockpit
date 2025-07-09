@@ -1,7 +1,6 @@
 using GLMakie
 using LinearAlgebra
 
-
 include("util.jl")
 
 """
@@ -225,7 +224,7 @@ function hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}, a::Int64,
             !isempty(param_vals[]) && ylims!(ax, extrema(param_vals[]))
         end
     end
-    
+
     return ax
 end
 

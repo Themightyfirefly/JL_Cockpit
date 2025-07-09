@@ -2,11 +2,11 @@ using GLMakie: Observable
 using Zygote
 
 struct Datapoint
-    epoch::Int
-    batch::Int
-    loss::Union{Float32, Nothing}
-    grads::Union{@NamedTuple{Any}, Nothing}
-    params::Union{Zygote.Params{Zygote.Buffer{Any, Vector{Any}}}, Nothing}
+    epoch::Int64
+    batch::Int64
+    loss::Union{Nothing, Float32}
+    grads::Union{Nothing, Tuple{@NamedTuple{layers::Tuple{Any}}}, Vector{<:Real}}
+    params::Union{Nothing, Zygote.Params{Zygote.Buffer{Any, Vector{Any}}}}
 end
 
 export Datapoint
