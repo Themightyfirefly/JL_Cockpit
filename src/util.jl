@@ -42,7 +42,7 @@ import Base.append!
 """
     append!(obs::Observable{Vector{T}}, val_vector::Vector{T}) where {T<:Real}
 
-Append a Vector if Real number to an Observable and trigger the Observable.
+Append a Vector of Real numbers to an Observable and trigger the Observable.
 """
 function append!(obs::Observable{Vector{T}}, val_vector::Vector{T}) where {T<:Real}
     append!(obs[], val_vector)
