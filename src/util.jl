@@ -1,12 +1,23 @@
 using GLMakie: Observable
 using Zygote
 
+"""
+    struct Datapoint
+        epoch::Int
+        batch::Int
+        loss::Union{Float32, Nothing}
+        grads::Union{@NamedTuple{Any}, Nothing}
+        params::Union{Zygote.Params{Zygote.Buffer{Any, Vector{Any}}}, Nothing}
+    end
+
+Store the information of one Training iteration.
+"""
 struct Datapoint
-    epoch::Int64
-    batch::Int64
-    loss::Union{Nothing, Float32}
-    grads::Union{Nothing, Tuple{@NamedTuple{layers::Tuple{Any}}}, Vector{<:Real}}
-    params::Union{Nothing, Zygote.Params{Zygote.Buffer{Any, Vector{Any}}}}
+    epoch::Int
+    batch::Int
+    loss::Union{Float32, Nothing}
+    grads::Union{@NamedTuple{Any}, Nothing}
+    params::Union{Zygote.Params{Zygote.Buffer{Any, Vector{Any}}}, Nothing}
 end
 
 export Datapoint

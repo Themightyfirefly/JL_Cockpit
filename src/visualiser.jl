@@ -45,43 +45,43 @@ function visualiser(;
         a::Int64 = 1
         b::Int64 = 1
         
-        @info "loss"
+        
         if vis_loss
             loss_plot!(fig, datapoints, a, b)
             a,b = iterate_plot_pos(a,b)
         end
-        @info "grad_norm"
+        
         if vis_grad_norm
             grad_norm_plot!(fig, datapoints, a, b)
             a,b = iterate_plot_pos(a,b)
         end
-        @info "vis_hist1d"
+        
         if vis_hist_1d 
             hist_1d_plot!(fig, datapoints, a, b)
             a,b = iterate_plot_pos(a,b)
         end
-        @info "vis_par"
+        
         if vis_params 
             params_plot!(fig, datapoints, a, b)
             a,b = iterate_plot_pos(a,b)
         end
-        @info "distance"
+        
         if vis_distance 
             distance_plot!(fig, datapoints, a, b)
             a,b = iterate_plot_pos(a,b)
         end
-        @info "vis_update"
+        
         if vis_update_size
             update_size_plot!(fig, datapoints, a, b)
             a,b = iterate_plot_pos(a,b)
         end
-        @info "vis_hist2d"
+        
         if vis_hist_2d
             hist_2d_plot!(fig, datapoints, a, b)
             a,b = iterate_plot_pos(a,b)
         end
 
-        @info "events"
+        @info "Initialising Key Events"
         DataInspector(fig, textcolor = :black, strokecolor = :black, font = "Consolas")
       
         on(fig.scene.events.keyboardbutton) do event

@@ -86,6 +86,7 @@ function training_loop(
     @info "Start Training"
 
     for epoch in 1:epochs
+        @info "Epoch $epoch out of $epochs"
         # Iterate over batches returned by data loader
         for (i, (x, y)) in enumerate(train_loader)
             # Compute loss and gradients of model w.r.t. its parameters (individually for each batch)
@@ -101,7 +102,7 @@ function training_loop(
         end
     end
 
-    @info "Training Completed"
+    @info "Training Complete"
 
     return true
 end
