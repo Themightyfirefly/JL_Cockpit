@@ -8,57 +8,29 @@ CurrentModule = JL_Cockpit
 ```
 
 ```@docs
-loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
+loss_plot!
 ```
 
 ```@docs
-loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+grad_norm_plot!
 ```
 
 ```@docs
-grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
+hist_1d_plot!
 ```
 
 ```@docs
-grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+params_plot!
 ```
 
 ```@docs
-hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
+distance_plot!
 ```
 
 ```@docs
-hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+update_size_plot!
 ```
 
 ```@docs
-params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
-```
-
-```@docs
-params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
-```
-
-```@docs
-distance_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
-```
-
-```@docs
-distance_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
-```
-
-```@docs
-update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
-```
-
-```@docs
-update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
-```
-
-```@docs
-hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
-```
-
-```@docs
-hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}})
+hist_2d_plot!
 ```

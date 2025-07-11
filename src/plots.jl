@@ -4,7 +4,7 @@ using LinearAlgebra
 include("util.jl")
 
 """
-    loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+    loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
 
 Plot the loss of each Datapoint as a line graph.
 """
@@ -32,7 +32,7 @@ Use a predefined position (1,1) in Figure, if none is given.
 loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = loss_plot!(fig, datapoints, 1, 1)
 
 """
-    grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+    grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
 
 Plot the norm of the gradients in each Datapoint as a line graph. 
 """
@@ -61,7 +61,7 @@ Use a predefined position (2,1) in Figure, if none is given.
 grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = grad_norm_plot!(fig, datapoints, 2, 1)
 
 """
-    hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+    hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
 
 Plot a histogram of gradients in the last Datapoint.
 """
@@ -92,7 +92,7 @@ Use a predefined position (1,2) in Figure, if none is given.
 hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = hist_1d_plot!(fig, datapoints, 1, 2)
 
 """
-    params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+    params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
 
 Plot a histogram of the parameters given in the last Datapoint.
 """
@@ -122,7 +122,7 @@ Use a predefined position (2,2) in Figure, if none is given.
 params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = params_plot!(fig, datapoints, 2, 2)
 
 """
-    distance_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+    distance_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
 
 Plot the l2 distance between the parameters in the first and last Datapoint as a point graph.
 """
@@ -154,7 +154,7 @@ distance_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) = d
 
 
 """
-    update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}})
+    update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
 
 Plot the l2 distance between parameters in the second to last and last Datapoint given.
 """
