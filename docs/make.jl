@@ -24,6 +24,10 @@ makedocs(;
     pages=[
         "Home" => "index.md",
         "Getting Started" => "getting_started.md",
+        "Tutorials" => [
+            "Customising the Training" => "tutorials/custom_training.md",
+            "Using the Visualiser standalone" => "tutorials/visualiser.md",
+        ],
         "API Reference" => [
             "Training and Visualisation API" => "API/training_api.md",
             "Plot Functions" => "API/plot_functions.md",

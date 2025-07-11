@@ -4,7 +4,11 @@ CurrentModule = JL_Cockpit
 
 # JL_Cockpit
 
-Documentation for [JL_Cockpit](https://github.com/Themightyfirefly/JL_Cockpit.jl).
+A visualisation of metrics during a Flux.jl training loop.
+
+![Training Visualisation](vis.gif)
+
+# Index of all functions
 
 ```@index
 ```

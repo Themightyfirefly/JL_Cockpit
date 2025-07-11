@@ -16,9 +16,3 @@ To add the JL_Cockpit module to your Julia environment run
 Once the module has been added, activate the module
 
     using JL_Cockpit
-
-The module provides the training_loop function, which will run a Flux.jl training loop. During the training, analytical metrics will be visualised. To run the training and visualisation with default values, execute
-
-    training_loop()
-
-
