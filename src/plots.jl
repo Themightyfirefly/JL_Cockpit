@@ -12,7 +12,7 @@ function loss_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}
     losses = Observable{Vector{Float32}}([])
 
     ax_loss = Axis(fig[a, b], xlabel = "Iteration", ylabel = "Loss", title = "Training Loss")
-    lines!(ax_loss, losses, label = "Training Loss", color = :blue)
+    lines!(ax_loss, losses, label = "Training Loss", color = Makie.wong_colors()[1])
 
     on(datapoints) do data
         (length(data) > 1) && push!(losses, data[end].loss)
@@ -40,7 +40,7 @@ function grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapo
     grad_norms = Observable{Vector{Float32}}([])
 
     ax_grad_norm = Axis(fig[a, b], xlabel = "Iteration", ylabel = "GradNorm", title = "Gradient Norms")
-    scatter!(ax_grad_norm, grad_norms, label = "Gradient Norm", color = Makie.wong_colors()[3], markersize = 5, strokewidth = 0)
+    scatter!(ax_grad_norm, grad_norms, label = "Gradient Norm", color = Makie.wong_colors()[1], markersize = 5, strokewidth = 0)
 
     on(datapoints) do data
         (length(data) > 1) && push!(grad_norms, norm(myflatten(data[end].grads)))
