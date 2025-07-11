@@ -41,6 +41,7 @@ function visualiser(;
     @info "Initialising Plots"
 
     with_theme(theme_black()) do
+        is_open_status = true
         fig = Figure(size = (1920, 1080))
         a::Int64 = 1
         b::Int64 = 1
@@ -83,21 +84,27 @@ function visualiser(;
 
         @info "Initialising Key Events"
         DataInspector(fig, textcolor = :black, strokecolor = :black, font = "Consolas")
-      
+        
         on(fig.scene.events.keyboardbutton) do event
-            event.key == Keyboard.r && foreach(autolimits!, fig.content)  # Press "R" to reset zoom
-            event.key == Keyboard.s && save("training_plot.png", fig)     # Press "S" to save plot
+            if is_open_status == true
+                event.key == Keyboard.r && foreach(autolimits!, fig.content)  # Press "R" to reset zoom
+                event.key == Keyboard.s && save("training_plot.png", fig)     # Press "S" to save plot
+            end
         end
+
 
         @info "Displaying Figure"
         display(fig)
 
         # Exit training loop when user closes the Makie window
         on(events(fig.scene).window_open) do is_open
-            if !is_open
-           @info "Window closed - Visualization interrupted."
+            if is_open_status == !is_open
+                @info "Window closed - Visualization interrupted."
+                is_open_status = false
+            end
         end
-end
+
+        
 
     end    
         return Visualiser(datapoints)
