@@ -1,4 +1,4 @@
-module jl_cockpit
+module JL_Cockpit
     using GLMakie
     using LinearAlgebra: norm
     using Zygote

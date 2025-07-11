@@ -7,17 +7,17 @@ Pkg.activate(".")
 Pkg.instantiate()
 Pkg.precompile()
 
-using jl_cockpit
+using JL_Cockpit
 using Documenter
 
-DocMeta.setdocmeta!(jl_cockpit, :DocTestSetup, :(using jl_cockpit); recursive=true)
+DocMeta.setdocmeta!(JL_Cockpit, :DocTestSetup, :(using JL_Cockpit); recursive=true)
 
 makedocs(;
-    modules=[jl_cockpit],
+    modules=[JL_Cockpit],
     authors="Niklas Schlüter niklas.schlueter@tu-berlin.de",
-    sitename="jl_cockpit.jl",
+    sitename="JL_Cockpit.jl",
     format=Documenter.HTML(;
-        canonical="https://Themightyfirefly.github.io/jl_cockpit.jl",
+        canonical="https://Themightyfirefly.github.io/JL_Cockpit.jl",
         edit_link="main",
         assets=String[],
     ),
@@ -34,6 +34,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/Themightyfirefly/jl_cockpit.jl",
+    repo="github.com/Themightyfirefly/JL_Cockpit.jl",
     devbranch="main",
 )

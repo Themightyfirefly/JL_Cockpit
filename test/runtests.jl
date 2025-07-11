@@ -1,7 +1,7 @@
-using jl_cockpit
+using JL_Cockpit
 using Test
 
-@testset "jl_cockpit.jl" begin
+@testset "JL_Cockpit.jl" begin
     @testset "plots" begin
         include("plots_test.jl")
     end

@@ -1,4 +1,4 @@
-name = "jl_cockpit"
+name = "JL_Cockpit"
 uuid = "44272be6-8374-4492-a716-50d0e891cc14"
 authors = ["Niklas Schlüter niklas.schlueter@tu-berlin.de"]
 version = "1.0.0-DEV"

@@ -2672,7 +2672,7 @@ git-tree-sha1 = "51b5eeb3f98367157a7a12a1fb0aa5328946c03c"
 uuid = "9a68df92-36a6-505f-a73e-abb412b6bfb4"
 version = "0.2.3+0"
 
-[[deps.jl_cockpit]]
+[[deps.JL_Cockpit]]
 deps = ["CairoMakie", "Flux", "FluxTraining", "GLMakie", "LinearAlgebra", "MLDatasets", "Makie", "Plots", "Statistics", "Zygote"]
 path = ".."
 uuid = "44272be6-8374-4492-a716-50d0e891cc14"

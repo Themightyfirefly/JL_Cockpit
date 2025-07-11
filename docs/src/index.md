@@ -1,10 +1,10 @@
 ```@meta
-CurrentModule = jl_cockpit
+CurrentModule = JL_Cockpit
 ```
 
-# jl_cockpit
+# JL_Cockpit
 
-Documentation for [jl_cockpit](https://github.com/Themightyfirefly/jl_cockpit.jl).
+Documentation for [JL_Cockpit](https://github.com/Themightyfirefly/JL_Cockpit.jl).
 
 ```@index
 ```

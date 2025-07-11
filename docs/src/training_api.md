@@ -1,5 +1,5 @@
 ```@meta
-CurrentModule = jl_cockpit
+CurrentModule = JL_Cockpit
 ```
 
 ```@index

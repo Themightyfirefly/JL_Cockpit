@@ -1,5 +1,5 @@
 using Test
-using jl_cockpit
+using JL_Cockpit
 using GLMakie
 
 fig = Figure(size = (1920, 1080))

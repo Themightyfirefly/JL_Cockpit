@@ -1,4 +1,4 @@
-using jl_cockpit
+using JL_Cockpit
 using Test
 using GLMakie: Observable
 using Zygote
@@ -35,8 +35,8 @@ end
     param_array = Any[buf]
     params = Zygote.Params(param_array)
 
-    dp1 = jl_cockpit.Datapoint(1, 1, 0.5f0, grads, params)
-    dp2 = jl_cockpit.Datapoint(1, 2, 0.3f0, nothing, params)
+    dp1 = JL_Cockpit.Datapoint(1, 1, 0.5f0, grads, params)
+    dp2 = JL_Cockpit.Datapoint(1, 2, 0.3f0, nothing, params)
     obs = Observable([dp1])
 
     push!(obs, dp2)
@@ -68,41 +68,41 @@ end
     # myflatten!(res, t::Union{Tuple, NamedTuple}) -> nothing
     # 1) Tuple
     res1 = Float32[]
-    jl_cockpit.myflatten!(res1, (1.0, 2.0))
+    JL_Cockpit.myflatten!(res1, (1.0, 2.0))
     @test res1 == Float32[]
 
     # 2) NamedTuple
     res2 = Float32[]
-    jl_cockpit.myflatten!(res2, (; a = 3.0, b = 4.5))
+    JL_Cockpit.myflatten!(res2, (; a = 3.0, b = 4.5))
     @test res2 == Float32[]
 
     # 3) myflatten!(res, t::Zygote.Params{Zygote.Buffer{Any, Vector{Any}}})  -> nothing
     buf = Zygote.Buffer(Any[9.9, 10.10])
     ps  = Zygote.Params(Any[buf])
     res3 = Float32[]
-    jl_cockpit.myflatten!(res3, ps)
+    JL_Cockpit.myflatten!(res3, ps)
     @test res3 == Float32[]
 
     # 4) myflatten!(res, xs::AbstractArray) empty array -> append
     arr  = [7.7, 8.8]
     res4 = Float32[]
-    jl_cockpit.myflatten!(res4, arr)
+    JL_Cockpit.myflatten!(res4, arr)
     @test res4 == append!(res4, arr)
 
     # 5) myflatten!(res, xs::AbstractArray) -> append
     arr  = [7.7, 8.8]
     res5 = Float32[1.1, 6.6]
-    jl_cockpit.myflatten!(res5, arr)
+    JL_Cockpit.myflatten!(res5, arr)
     @test res5 == append!(res5, arr)
 
     # myflatten!(res, x) -> nothing
     # 6) Scalar value
     res6 = Float32[]
-    jl_cockpit.myflatten!(res6, 42.0)
+    JL_Cockpit.myflatten!(res6, 42.0)
     @test res6 == Float32[]
 
     # 7) 'nothing'
     res7 = Float32[1.1]
-    jl_cockpit.myflatten!(res7, nothing)
+    JL_Cockpit.myflatten!(res7, nothing)
     @test res7 == Float32[1.1]
 end
