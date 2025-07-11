@@ -20,3 +20,5 @@ Once the module has been added, activate the module
 To run the visualised training, execute
 
     training_loop()
+
+During the visualisation, users can press the r key to reset the plots (in case they zoomed into one) and the s key to save a screenshot of the current figure.
