@@ -68,7 +68,7 @@ Plot a histogram of gradients in the last Datapoint.
 function hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
     grad_elems = Observable{Vector{Float32}}([])
 
-    ax_hist_1d = Axis(fig[a, b], xlabel = "", ylabel = "", title = "Gradient Element Histogram")
+    ax_hist_1d = Axis(fig[a, b], xlabel = "", ylabel = "", title = "Gradient Element Histogram", yscale = log10)
     plot_exist = false
 
     on(datapoints) do data
@@ -76,7 +76,7 @@ function hist_1d_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoin
             grad_elems[] = myflatten(data[end].grads)
             if !plot_exist
                 plot_exist = true
-                hist!(ax_hist_1d, grad_elems, bins = 50, color = Makie.wong_colors()[4], strokewidth = 0.1, strokecolor = :white)
+                hist!(ax_hist_1d, grad_elems, bins = range(-0.2, 0.2, length = 50), color = Makie.wong_colors()[4], strokewidth = 0.1, strokecolor = :white)
             end
         end
     end
@@ -106,8 +106,9 @@ function params_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint
         params[] = myflatten(data[end].params)
         if !plot_exist
             plot_exist = true
-            hist!(ax_params, params, bins = 50, color = Makie.wong_colors()[3], strokewidth = 0.1, strokecolor = :white)
+            h = hist!(ax_params, params, bins = range(-0.2, 0.2, length = 50), color = Makie.wong_colors()[3], strokewidth = 0.1, strokecolor = :white)
         end
+    
     end
 
     return params
@@ -189,44 +190,47 @@ update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) 
 
 Plot the Parameters and the corresponding Gradients in the current training iteration.
 """
-function hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}, a::Int64, b::Int64)
+function hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}, a::Int, b::Int)
+    nbins = 50 # 50 bins per axis
     ax = Axis(fig[a, b],
         xlabel = "Gradient Value",
         ylabel = "Parameter Value",
-        title = "GradNorm_2D")
+        title  = "GradNorm 2D (heatmap)")
 
-    # Initialize empty observables
-    grad_vals = Observable(Float32[])
-    param_vals = Observable(Float32[])
     
-    # Store the scatter plot object so we can update it
-    scatter_plot = nothing
+    heat_obs = Observable(zeros(Float32, nbins, nbins))
+    heatmap!(ax, heat_obs; colormap = :turbo)
 
-    on(datapoints) do data
-        if !isempty(data) && data[end].grads !== nothing && data[end].params !== nothing
-            # Get current values
-            current_grads = myflatten(data[end].grads)
-            current_params = myflatten(data[end].params)
-            
-            # Update observables
-            grad_vals[] = current_grads
-            param_vals[] = current_params
-            
-            # Create or update the scatter plot
-            if scatter_plot === nothing
-                scatter_plot = scatter!(ax, grad_vals, param_vals,
-                    color = (:blue, 0.2),
-                    markersize = 5)
-            end
-            
-            # Auto-scale axes
-            !isempty(grad_vals[]) && xlims!(ax, extrema(grad_vals[]))
-            !isempty(param_vals[]) && ylims!(ax, extrema(param_vals[]))
+    on(datapoints) do dps
+        dp = dps[end]
+        if dp.grads === nothing || dp.params === nothing 
+            return # skip if either of them is empty
         end
+
+        g = myflatten(dp.grads)
+        p = myflatten(dp.params)
+        isempty(g) || isempty(p) && return # skip if either of them is empty
+
+        # Compute bin edges 
+        eg = range(minimum(g), stop=maximum(g), length=nbins+1)
+        ep = range(minimum(p), stop=maximum(p), length=nbins+1)
+
+        # convert into 50x50 matrix
+        mat = zeros(Float32, nbins, nbins)
+
+        # search for each value's bin 
+        @inbounds for (gi, pi) in zip(g, p)
+            i = clamp(searchsortedfirst(eg, gi) - 1, 1, nbins) #ensure index is not out-of-bounds
+            j = clamp(searchsortedfirst(ep, pi) - 1, 1, nbins)
+            mat[j, i] += Float32(1.0) # to match matrix's type. Without this plot will be pure color. TBD why
+        end
+
+        heat_obs[] = mat
     end
 
     return ax
 end
+
 
 """
     hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}})
@@ -234,4 +238,3 @@ end
 Use the predefined position (3,1) in Figure, if none is given.
 """
 hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}) = hist_2d_plot!(fig, datapoints, 3, 1)
-

@@ -38,13 +38,12 @@ Train with AD and visualise live metrics.
 function training_loop(
     ; model = nothing, dataset_train = nothing, dataset_test = nothing, batchsize = 128, epochs = 5, optim = nothing,
     vis_loss::Bool = true, vis_grad_norm::Bool = true, vis_hist_1d::Bool = true, vis_params::Bool = true,
-    vis_distance::Bool = true, vis_update_size::Bool = true, vis_hist_2d::Bool = true
+    vis_distance::Bool = true, vis_update_size::Bool = true, vis_hist_2d::Bool = false
 )
 
     @info "Initialising Training"
 
     # Assignment of standard values
-    # TODO remove these for the final submission
     if isnothing(model)
         model = Chain(
         Conv((5, 5), 1 => 6, relu),  # 1 input color channel
