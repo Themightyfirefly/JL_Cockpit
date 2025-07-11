@@ -76,7 +76,7 @@ function training_loop(
     # creating a visualiser and pass the batch size
     vis = visualiser(
         vis_loss = vis_loss, vis_grad_norm = vis_grad_norm, vis_hist_1d = vis_hist_1d, vis_params = vis_params, 
-        vis_distance = vis_distance, vis_update_size = vis_update_size, vis_hist_2d = vis_hist_2d
+        vis_distance = vis_distance, vis_update_size = vis_update_size, #vis_hist_2d = vis_hist_2d
     )
 
     @info "Pushing Initial State to Visualiser"

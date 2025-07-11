@@ -40,7 +40,7 @@ function grad_norm_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapo
     grad_norms = Observable{Vector{Float32}}([])
 
     ax_grad_norm = Axis(fig[a, b], xlabel = "Iteration", ylabel = "GradNorm", title = "Gradient Norms")
-    lines!(ax_grad_norm, grad_norms, label = "Gradient Norm", color = :blue)
+    scatter!(ax_grad_norm, grad_norms, label = "Gradient Norm", color = Makie.wong_colors()[3], markersize = 5, strokewidth = 0)
 
     on(datapoints) do data
         (length(data) > 1) && push!(grad_norms, norm(myflatten(data[end].grads)))
@@ -191,7 +191,7 @@ update_size_plot!(fig::Makie.Figure, datapoints::Observable{Vector{Datapoint}}) 
 Plot the Parameters and the corresponding Gradients in the current training iteration.
 """
 function hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}, a::Int, b::Int)
-    nbins = 50 # 50 bins per axis
+    nbins = 100 # 50 bins per axis
     ax = Axis(fig[a, b],
         xlabel = "Gradient Value",
         ylabel = "Parameter Value",
@@ -199,7 +199,7 @@ function hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}, a::Int, b
 
     
     heat_obs = Observable(zeros(Float32, nbins, nbins))
-    heatmap!(ax, heat_obs; colormap = :turbo)
+    hm = heatmap!(ax, heat_obs; colormap = :turbo)
 
     on(datapoints) do dps
         dp = dps[end]
@@ -226,10 +226,12 @@ function hist_2d_plot!(fig, datapoints::Observable{Vector{Datapoint}}, a::Int, b
         end
 
         heat_obs[] = mat
+        hm.colorrange[] = (0f0, maximum(mat))
     end
 
     return ax
 end
+
 
 
 """
