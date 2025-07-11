@@ -25,9 +25,9 @@ makedocs(;
         "Home" => "index.md",
         "Getting Started" => "getting_started.md",
         "API Reference" => [
-            "Training and Visualisation API" => "training_api.md",
-            "Plot Functions" => "plot_functions.md",
-            "Utils" => "utils.md",
+            "Training and Visualisation API" => "API/training_api.md",
+            "Plot Functions" => "API/plot_functions.md",
+            "Utils" => "API/utils.md",
         ],
         "Internal Functions" => "internal.md"
     ],
