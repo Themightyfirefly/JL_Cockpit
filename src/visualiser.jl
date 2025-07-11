@@ -95,8 +95,7 @@ function visualiser(;
         # Exit training loop when user closes the Makie window
         on(events(fig.scene).window_open) do is_open
             if !is_open
-            println("Window closed - Training Loop interrupted.")
-            exit()   
+           @info "Window closed - Visualization interrupted."
         end
 end
 
