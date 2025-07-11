@@ -1,3 +1,3 @@
-# jl_cockpit Documentation
+# JL_Cockpit Documentation
 
-This is the documentation for the jl_cockpit Julia module, available at [https://themightyfirefly.github.io/jl_cockpit/](https://themightyfirefly.github.io/jl_cockpit/dev)
+This is the documentation for the JL_Cockpit Julia module, available at [https://themightyfirefly.github.io/JL_Cockpit/dev](https://themightyfirefly.github.io/JL_Cockpit/dev)
